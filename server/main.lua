@@ -29,7 +29,7 @@ RegisterNetEvent("esx_adminmenu:server:RevivePlayer", function(pid)
     --end
 end)
 
-local TSGetPlayers = function()
+ESX.RegisterServerCallback('esx_adminmenu:server:GetOnlinePlayers', function(source, cb)
     local players = ESX.GetPlayers()
     local plylist = {}
     for i = 1, #players, 1 do
@@ -37,9 +37,5 @@ local TSGetPlayers = function()
         table.insert(plylist, plytable)
     end
     table.sort(plylist, function(a, b) return a.name:upper() < b.name:upper() end)
-    return plylist
-end
-
-ESX.RegisterServerCallback('esx_adminmenu:server:GetOnlinePlayers', function(source, cb)
-    cb(TSGetPlayers())
+    cb(plylist)
 end)
