@@ -36,13 +36,13 @@ RegisterNetEvent("esx_adminmenu:server:ChangeSkin", function(ply)
     yPlayer.triggerEvent("esx_mroupa:openSaveableMenu")
 end)
 
-RegisterNetEvent('esx_adminmenu:server:ShowInventory', function(id)
+RegisterNetEvent("esx_adminmenu:server:ShowInventory", function(id)
     local src = source
     local Ply = id
-    --local allowed = CheckAllowed(src, 'OnlinePlyOptions_OpenInventory', 'OnlinePlyOptions')
+    --local allowed = CheckAllowed(src, "OnlinePlyOptions_OpenInventory", "OnlinePlyOptions")
     --if allowed then
         local inv = exports.ox_inventory:Inventory(tonumber(Ply))
-        TriggerClientEvent('ox_inventory:viewInventory', src, inv)
+        TriggerClientEvent("ox_inventory:viewInventory", src, inv)
     --end
 end)
 
@@ -62,6 +62,16 @@ RegisterNetEvent("esx_adminmenu:server:FakeCallply", function(data2)
     --local allowed = CheckAllowed(xPlayer.source, "TrollMenu_FakeSound", "TrollMenu")
     --if allowed then
         TriggerClientEvent("esx_adminmenu:troll:FakeCall", yPlayer.source, data2.type)
+    --else
+    --end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:Crashply", function(data2)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(data2.id)
+    --local allowed = CheckAllowed(xPlayer.source, "TrollMenu_Crash", "TrollMenu")
+    --if allowed then
+        TriggerClientEvent("esx_adminmenu:troll:Crashply", yPlayer.source)
     --else
     --end
 end)

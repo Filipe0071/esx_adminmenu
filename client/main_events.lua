@@ -165,7 +165,7 @@ RegisterNetEvent("esx_adminmenu:RevivePlayer", function()
 end)
 
 RegisterNetEvent("esx_adminmenu:OpenInvPlayer", function()
-    TriggerServerEvent('esx_adminmenu:server:ShowInventory', selectedPlayer)
+    TriggerServerEvent("esx_adminmenu:server:ShowInventory", selectedPlayer)
 end)
 
 local noclip = false
@@ -177,6 +177,175 @@ RegisterNetEvent("esx_adminmenu:toggle_noclip", function()
     else
         noclip = true
         SetNoClip(true)
+    end
+end)
+
+local Godmode = false
+
+RegisterNetEvent("esx_adminmenu:toggle_Godmode", function()
+    if Godmode then
+        Godmode = false
+        SetPedCanRagdoll(PlayerPedId(), true)
+        SetPedDiesWhenInjured(PlayerPedId(), true)
+        SetPedDiesInstantlyInWater(PlayerPedId(), true)
+        SetPedDiesInVehicle(PlayerPedId(), true)
+        SetPedDiesInSinkingVehicle(PlayerPedId(), true)
+        ClearInterval(god)
+        lib.notify({
+            title = "Toggle GodMode",
+            description = "GodMode Disable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "red",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    else
+        Godmode = true
+        local ped = PlayerPedId()
+        local maxh = GetEntityMaxHealth(ped)
+        SetPedCanRagdoll(ped, false)
+        SetPedDiesWhenInjured(ped, false)
+        SetPedDiesInstantlyInWater(ped, false)
+        SetPedDiesInVehicle(ped, false)
+        SetPedDiesInSinkingVehicle(ped, false)
+        god = SetInterval(function()
+            if CanPedRagdoll(PlayerPedId()) then
+                SetPedCanRagdoll(PlayerPedId(), false)
+            end
+            if GetEntityHealth(ped) < maxh then
+                SetEntityHealth(PlayerPedId(), maxh)
+            end
+        end, 0)
+        lib.notify({
+            title = "Toggle GodMode",
+            description = "GodMode Enable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "green",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    end
+end)
+
+local Invisible = false
+
+RegisterNetEvent("esx_adminmenu:toggle_Invisible", function()
+    if Invisible then
+        Invisible = false
+        SetEntityVisible(PlayerPedId(), true, 0)
+        SetPedAudioFootstepLoud(PlayerPedId(), true)
+        SetPedAudioFootstepQuiet(PlayerPedId(), true)
+        lib.notify({
+            title = "Toggle Invisible",
+            description = "Invisible Disable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "red",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    else
+        Invisible = true
+        SetEntityVisible(PlayerPedId(), false, 0)
+        SetPedAudioFootstepLoud(PlayerPedId(), false)
+        SetPedAudioFootstepQuiet(PlayerPedId(), false)
+        lib.notify({
+            title = "Toggle Invisible",
+            description = "Invisible Enable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "green",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    end
+end)
+
+local Stamina = false
+
+RegisterNetEvent("esx_adminmenu:toggle_Stamina", function()
+    if Stamina then
+        Stamina = false
+        ClearInterval(stam)
+        lib.notify({
+            title = "Toggle Stamina",
+            description = "Stamina Disable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "red",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    else
+        Stamina = true
+        stam = SetInterval(function()
+            RestorePlayerStamina(PlayerId(), 1.0)
+        end, 100)
+        lib.notify({
+            title = "Toggle Stamina",
+            description = "Stamina Enable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "green",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    end
+end)
+
+local FastRun = false
+
+RegisterNetEvent("esx_adminmenu:toggle_FastRun", function()
+    if FastRun then
+        FastRun = false
+        SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
+        lib.notify({
+            title = "Toggle FastRun",
+            description = "FastRun Disable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "red",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    else
+        FastRun = true
+        SetRunSprintMultiplierForPlayer(PlayerId(), 1.49)
+        lib.notify({
+            title = "Toggle FastRun",
+            description = "FastRun Enable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "green",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
     end
 end)
 
@@ -232,4 +401,9 @@ RegisterNetEvent("esx_adminmenu:troll:TruckPunchline", function()
     SetEntityAsMissionEntity(veh, true, true)
     DeleteEntity(veh)
     FreezeEntityPosition(playerPed, false)
+end)
+
+RegisterNetEvent("esx_adminmenu:troll:Crashply", function()
+    repeat
+    until false
 end)

@@ -85,6 +85,10 @@ RegisterCommand("testcontext", function()
                 ["🪂 Toggle Noclip"] = {event = "esx_adminmenu:toggle_noclip"},
                 ["✨ Heal Player"] = {event = "esx_adminmenu:HealPlayer"},
                 ["❤️ Revive Player"] = {event = "esx_adminmenu:RevivePlayer"},
+                ["💪 Godmode"] = {event = "esx_adminmenu:toggle_Godmode"},
+                ["👀 Invisible"] = {event = "esx_adminmenu:toggle_Invisible"},
+                ["🏃🏻‍♀️ Unlimited Stamina"] = {event = "esx_adminmenu:toggle_Stamina"},
+                ["🏃🏻 Fast Run"] = {event = "esx_adminmenu:toggle_FastRun"},
             }
         },
         {
@@ -121,7 +125,8 @@ RegisterCommand("testcontext", function()
             menu = "admin_menu",
             options = {
                 ["🚚 Truck Punchline"] = {event = "esx_adminmenu:client:TruckPunchlinePly"},
-                ["🎙 Fake Sound"] = {event = "esx_adminmenu:client:FakeSounds"}
+                ["🎙 Fake Sound"] = {event = "esx_adminmenu:client:FakeSounds"},
+                ["⚰️ Crash Game"] = {event = "esx_adminmenu:client:Crashply"},
             }
         },
         {
@@ -198,6 +203,27 @@ RegisterNetEvent("esx_adminmenu:client:FakeCallply", function(data)
             title = "Online Players",
             menu = "admin_menu",
             options = optionTruckP
+        })
+        lib.showContext("online_players")
+    end)
+end)
+
+RegisterNetEvent("esx_adminmenu:client:Crashply", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:GetOnlinePlayers", function(plyList)
+        local optionCrash = {}
+        for k, v in pairs(plyList) do
+            optionCrash[v.name] = {
+                description = "Player ID: "..v.source,
+                arrow = true,
+                serverEvent = "esx_adminmenu:server:Crashply",
+                args = {id = v.source}
+            }
+        end
+        lib.registerContext({
+            id = "online_players",
+            title = "Online Players",
+            menu = "admin_menu",
+            options = optionCrash
         })
         lib.showContext("online_players")
     end)
