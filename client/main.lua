@@ -1,3 +1,35 @@
+local fakeNotif = {
+    {
+        name = "Discord Call",
+        youtube_id = "n_WorPInSPQ",
+        volume = 25 -- 75% is the maximum.
+    }, {
+        name = "Discord Message",
+        youtube_id = "rIPq9Fl5r44",
+        volume = 20
+    }, {
+        name = "Skype Call",
+        youtube_id = "lVQI7CLus04",
+        volume = 25
+    }, {
+        name = "TS3 Hey Wake Up",
+        youtube_id = "s-KcXdYysTQ",
+        volume = 15
+    }, {
+        name = "Win10 Error",
+        youtube_id = "QkcEqzO_pus",
+        volume = 25
+    }, {
+        name = "Win10 USB",
+        youtube_id = "OOJi5zm9GYQ",
+        volume = 60
+    }, {
+        name = "Door Knocking",
+        youtube_id = "4Potjy81R3c",
+        volume = 60
+    }
+}
+
 RegisterCommand("testcontext", function()
     lib.registerContext({
         id = "admin_menu",
@@ -50,10 +82,7 @@ RegisterCommand("testcontext", function()
             title = "🧍‍♂️ Player Options",
             menu = "player_related_options",
             options = {
-                ["🪂 Toggle Noclip"] = {
-                    arrow = true,
-                    event = "esx_adminmenu:noclip_menu",
-                },
+                ["🪂 Toggle Noclip"] = {event = "esx_adminmenu:toggle_noclip"},
                 ["✨ Heal Player"] = {event = "esx_adminmenu:HealPlayer"},
                 ["❤️ Revive Player"] = {event = "esx_adminmenu:RevivePlayer"},
             }
@@ -91,7 +120,8 @@ RegisterCommand("testcontext", function()
             title = "🚧 Troll Menu",
             menu = "admin_menu",
             options = {
-                ["Nothing here"] = {}
+                ["🚚 Truck Punchline"] = {event = "esx_adminmenu:client:TruckPunchlinePly"},
+                ["🎙 Fake Sound"] = {event = "esx_adminmenu:client:FakeSounds"}
             }
         },
         {
@@ -109,27 +139,78 @@ RegisterCommand("testcontext", function()
     lib.showContext("admin_menu")
 end)
 
-RegisterNetEvent("esx_adminmenu:noclip_menu", function()
-    lib.registerContext({
-        id = "noclip_options",
-        title = "🪂 Noclip Options",
-        menu = "player_options",
-        options = {
-            ["🪂 Activate Noclip"] = {event = "esx_adminmenu:activate_noclip"},
-            ["🪂 Desable Noclip"] = {event = "esx_adminmenu:disable_noclip"}
+RegisterNetEvent("esx_adminmenu:client:TruckPunchlinePly", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:GetOnlinePlayers", function(plyList)
+        local optionTruckP = {}
+        for k, v in pairs(plyList) do
+            optionTruckP[v.name] = {
+                description = "Player ID: "..v.source,
+                arrow = true,
+                serverEvent = "esx_adminmenu:server:TruckPunchlinePly",
+                args = {id = v.source}
+            }
+        end
+        lib.registerContext({
+            id = "online_players",
+            title = "Online Players",
+            menu = "admin_menu",
+            options = optionTruckP
+        })
+        lib.showContext("online_players")
+    end)
+end)
+
+RegisterNetEvent("esx_adminmenu:client:FakeSounds", function()
+    local count = 2
+    local optionFakeSound = {}
+    for k, v in pairs(fakeNotif) do
+        local t = count - 1
+        optionFakeSound[v.name] = {
+            description = "Play: "..v.name,
+            arrow = true,
+            event = "esx_adminmenu:client:FakeCallply",
+            args = {type = t}
         }
+    end
+    lib.registerContext({
+        id = "fake_sounds",
+        title = "🎙 Fake Sounds",
+        menu = "troll_menu",
+        options = optionFakeSound
     })
-    lib.showContext("noclip_options")
+    lib.showContext("fake_sounds")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:FakeCallply", function(data)
+    local type = data.type
+    ESX.TriggerServerCallback("esx_adminmenu:server:GetOnlinePlayers", function(plyList)
+        local optionTruckP = {}
+        for k, v in pairs(plyList) do
+            optionTruckP[v.name] = {
+                description = "Player ID: "..v.source,
+                arrow = true,
+                serverEvent = "esx_adminmenu:server:FakeCallply",
+                args = {id = v.source, type = type}
+            }
+        end
+        lib.registerContext({
+            id = "online_players",
+            title = "Online Players",
+            menu = "admin_menu",
+            options = optionTruckP
+        })
+        lib.showContext("online_players")
+    end)
 end)
 
 OpenPlayersMenu = function(data)
     selectedPlayer = data.id
-    print(selectedPlayer)
     lib.registerContext({
         id = "online_players_each",
-        title = "ID: "..selectedPlayer..' Actions',
+        title = "ID: "..selectedPlayer.." Actions",
         menu = "online_players",
         options = {
+            ["💬 Change Skin"] = {event = "esx_adminmenu:client:ChangeSkin"},
             ["Nothing here"] = {}
         }
     })
@@ -163,6 +244,15 @@ end)
 
 RegisterNetEvent("open_online_players", function()
     OnlinePlayers()
+end)
+
+RegisterNetEvent("esx_adminmenu:troll:FakeCall", function(type)
+    local notif = fakeNotif[type]
+    local url = string.format("https://furfag.de/eggs/youtube_player/index.html?video=%s&volume=%s", notif.youtube_id, math.min(notif.volume or 25, 75))
+    local dui = CreateDui(url, 1024, 1024)
+    duihandle = GetDuiHandle(dui)
+    Wait(10000)
+    DestroyDui(dui)
 end)
 
 RegisterKeyMapping("testcontext", "Admin Menu", "keyboard", "f10")

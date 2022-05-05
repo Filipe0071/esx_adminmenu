@@ -164,10 +164,76 @@ RegisterNetEvent("esx_adminmenu:RevivePlayer", function()
     TriggerServerEvent("esx_adminmenu:server:RevivePlayer", GetPlayerServerId(PlayerId()))
 end)
 
-RegisterNetEvent("esx_adminmenu:activate_noclip", function()
+local noclip = false
+
+RegisterNetEvent("esx_adminmenu:toggle_noclip", function()
+    if noclip then
+        TriggerEvent("esx_adminmenu:disable_noclip")
+    else
+        TriggerEvent("esx_adminmenu:enable_noclip")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:enable_noclip", function()
+    noclip = true
     SetNoClip(true)
 end)
 
 RegisterNetEvent("esx_adminmenu:disable_noclip", function()
+    noclip = false
     SetNoClip(false)
+end)
+
+RegisterNetEvent("esx_adminmenu:client:ChangeSkin", function()
+    TriggerServerEvent("esx_adminmenu:server:ChangeSkin", selectedPlayer)
+end)
+
+RegisterNetEvent("esx_adminmenu:troll:TruckPunchline", function()
+    local playerPed = PlayerPedId()
+    local pCoords = GetEntityCoords(playerPed)
+    local pRot = GetEntityRotation(playerPed)
+    RequestModel("rubble")
+    repeat
+        Wait(10)
+    until HasModelLoaded("rubble")
+    FreezeEntityPosition(playerPed, true)
+    if IsPedInAnyVehicle(playerPed, false) then
+        FreezeEntityPosition(GetVehiclePedIsIn(playerPed, false), true)
+    end
+    local arrowSpawn = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 3.0, 0.0)
+    local vehSpawn = GetOffsetFromEntityInWorldCoords(playerPed, -10.0, 0.0, 0.0)
+    local veh = CreateVehicle("rubble", vehSpawn, pRot.z - 90, true, false)
+    DisableVehicleWorldCollision(veh)
+    SetEntityCoords(veh, vehSpawn, 0.0, 0.0, pRot.z - 90.0, true)
+    FreezeEntityPosition(veh, true)
+    local i = 1
+    local loop = 0
+    local draw = true
+    repeat
+        i = i + 1
+        if i == 1 then
+            draw = true
+        elseif i == 80 then
+            draw = false
+        elseif i == 160 then
+            draw = false
+            loop = loop + 1
+            i = 0
+        end
+        if draw then
+            DrawMarker(21, arrowSpawn.x, arrowSpawn.y, arrowSpawn.z + 0.5, 0.0, 0.0, 0.0, 0.0, 270.0, 0.0, 2.0, 2.0, 2.0, 255, 255, 255, 160, false, true, 2)
+        end
+        Wait(0)
+    until (loop == 3)
+    FreezeEntityPosition(veh, false)
+    SetEntityRotation(veh, 0.0, 0.0, pRot.z - 90.0, 0, true)
+    SetVehicleForwardSpeed(veh, 80.0)
+    FreezeEntityPosition(playerPed, false)
+    if IsPedInAnyVehicle(playerPed, false) then
+        FreezeEntityPosition(GetVehiclePedIsIn(playerPed, false), false)
+    end
+    Wait(6000)
+    SetEntityAsMissionEntity(veh, true, true)
+    DeleteEntity(veh)
+    FreezeEntityPosition(playerPed, false)
 end)
