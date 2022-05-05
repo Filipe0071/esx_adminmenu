@@ -4,7 +4,7 @@ RegisterCommand("testcontext", function()
         title = "Admin Menu",
         options = {
             ["🧍‍♂️ Online Players"] = {
-                event = "open_each_player",
+                event = "open_online_players",
                 description = "Show Online Players"
             },
             ["🧍‍♂️ Player Related Options"] = {
@@ -122,22 +122,34 @@ RegisterNetEvent("esx_adminmenu:noclip_menu", function()
     lib.showContext("noclip_options")
 end)
 
-OpenPlayersMenu = function(ply)
-    selectedPlayer = ply.source
+OpenPlayersMenu = function(data)
+    selectedPlayer = data.source
+    lib.registerContext({
+        id = "online_players_each",
+        title = "ID: "..selectedPlayer..' Actions',
+        menu = "online_players",
+        options = {
+                -- ADD OPTIONS
+        }
+    })
+    lib.showContext("online_players_each")
+end
+
+OnlinePlayers = function()
     ESX.TriggerServerCallback("esx_adminmenu:server:GetOnlinePlayers", function(plyList)
         for k, v in pairs(plylist) do
             optionTable[v.name] = {
                 description = v.name.." ID: "..v.source,
                 arrow = true,
-                --event = "open_each_player",
+                event = "open_each_player",
                 args = {id = v.source, name = v.name}
             }
         end
     end)
     lib.registerContext({
-        id = "each_player_option",
-        title = "ID: "..selectedPlayer.. " Player Actions",
-        menu = "online_players",
+        id = "online_players",
+        title = "Online Players",
+        menu = "admin_menu",
         options = optionTable
     })
     lib.showContext("each_player_option")
@@ -145,6 +157,9 @@ end
 
 RegisterNetEvent("open_each_player", function(data)
     OpenPlayersMenu(data)
+end)
+RegisterNetEvent("open_online_players", function()
+    OnlinePlayers()
 end)
 
 RegisterKeyMapping("testcontext", "Admin Menu", "keyboard", "f10")
