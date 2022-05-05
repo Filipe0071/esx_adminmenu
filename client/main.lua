@@ -124,12 +124,13 @@ end)
 
 OpenPlayersMenu = function(data)
     selectedPlayer = data.source
+    print(selectedPlayer)
     lib.registerContext({
         id = "online_players_each",
         title = "ID: "..selectedPlayer..' Actions',
         menu = "online_players",
         options = {
-                -- ADD OPTIONS
+            ["Nothing here"] = {}
         }
     })
     lib.showContext("online_players_each")
@@ -137,7 +138,8 @@ end
 
 OnlinePlayers = function()
     ESX.TriggerServerCallback("esx_adminmenu:server:GetOnlinePlayers", function(plyList)
-        for k, v in pairs(plylist) do
+        local optionTable = {}
+        for k, v in pairs(plyList) do
             optionTable[v.name] = {
                 description = v.name.." ID: "..v.source,
                 arrow = true,
@@ -145,19 +147,20 @@ OnlinePlayers = function()
                 args = {id = v.source, name = v.name}
             }
         end
+        lib.registerContext({
+            id = "online_players",
+            title = "Online Players",
+            menu = "admin_menu",
+            options = optionTable
+        })
+        lib.showContext("online_players")
     end)
-    lib.registerContext({
-        id = "online_players",
-        title = "Online Players",
-        menu = "admin_menu",
-        options = optionTable
-    })
-    lib.showContext("online_players")
 end
 
 RegisterNetEvent("open_each_player", function(data)
     OpenPlayersMenu(data)
 end)
+
 RegisterNetEvent("open_online_players", function()
     OnlinePlayers()
 end)
