@@ -76,6 +76,84 @@ RegisterNetEvent("esx_adminmenu:server:Crashply", function(data2)
     --end
 end)
 
+local TSGetNearbyEntities = function(entities, coords, modelFilter, maxDistance, isPed)
+	local nearbyEntities = {}
+	coords = type(coords) == "number" and GetEntityCoords(GetPlayerPed(coords)) or vector3(coords.x, coords.y, coords.z)
+	for _, entity in pairs(entities) do
+		if not isPed or (isPed and not IsPedAPlayer(entity)) then
+			if not modelFilter or modelFilter[GetEntityModel(entity)] then
+				local entityCoords = GetEntityCoords(entity)
+				if not maxDistance or #(coords - entityCoords) <= maxDistance then
+					nearbyEntities[#nearbyEntities+1] = {entity=entity, coords=entityCoords}
+				end
+			end
+		end
+	end
+	return nearbyEntities
+end
+
+local TSGetVehiclesInArea = function(coords, maxDistance, modelFilter)
+	return TSGetNearbyEntities(GetAllVehicles(), coords, modelFilter, maxDistance)
+end
+
+local TSSpawnVehicle = function(model, coords, heading, cb)
+	if type(model) == "string" then
+        model = GetHashKey(model)
+    end
+	CreateThread(function()
+		local entity = Citizen.InvokeNative(`CREATE_AUTOMOBILE`, model, coords.x, coords.y, coords.z, heading)
+		while not DoesEntityExist(entity) do
+            Wait(50)
+        end
+		cb(entity)
+	end)
+end
+
+RegisterNetEvent("esx_adminmenu:server:SpawnVehicle", function(veh)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local playerPed = GetPlayerPed(source)
+    local model = veh
+    local vehicle = GetVehiclePedIsIn(playerPed)
+    --local allowed = CheckAllowed(source, "VehicleRelated_Spawner", "VehicleRelatedOptions")
+    --if allowed then
+        if vehicle then
+            DeleteEntity(vehicle)
+        end
+        Wait(100)
+        TSSpawnVehicle(model or `baller2`, GetEntityCoords(playerPed), GetEntityHeading(playerPed), function(car)
+            local timeout = 50
+            repeat
+                Wait(0)
+                timeout = timeout - 1
+                SetPedIntoVehicle(playerPed, car, -1)
+            until GetVehiclePedIsIn(playerPed, false) ~= 0 or timeout < 1
+        end)
+    --else
+    --end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:DeleteVehicle", function(radi)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    --local allowed = CheckAllowed(xPlayer.source, "VehicleRelated_DeleteVehicle", "VehicleRelatedOptions")
+    local radius = 1.0
+    if radi then
+        radius = tonumber(radi) + 0.0
+    end
+    local veh = GetVehiclePedIsIn(GetPlayerPed(xPlayer.source))
+    --if allowed then
+        if veh ~= 0 then
+            DeleteEntity(veh)
+        else
+            veh = TSGetVehiclesInArea(GetEntityCoords(GetPlayerPed(xPlayer.source)), radius)
+            for i = 1, #veh do
+                DeleteEntity(veh[i].entity)
+            end
+        end
+        --TriggerClientEvent("esx_adminmenu:client:DeleteVehicle", xPlayer.source, radius)
+    --else
+    --end
+end)
+
 ESX.RegisterServerCallback("esx_adminmenu:server:GetOnlinePlayers", function(source, cb)
     local players = ESX.GetPlayers()
     local plylist = {}

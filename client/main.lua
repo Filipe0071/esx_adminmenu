@@ -117,7 +117,8 @@ RegisterCommand("testcontext", function()
             title = "🚙 Vehicle Related Options",
             menu = "admin_menu",
             options = {
-                ["Nothing here"] = {}
+                ["🚙 Spawn Custom Vehicle"] = {event = "esx_adminmenu:client:SpawnVehicle"},
+                ["🚙 Delete Vehicle Radius"] = {event = "esx_adminmenu:client:DeleteVehicle"}
             }
         },
         {
@@ -154,6 +155,26 @@ RegisterCommand("testcontext", function()
         },
     })
     lib.showContext("admin_menu")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:SpawnVehicle", function()
+    local input = lib.inputDialog("TS Admin Menu", {"Vehicle Code"})
+    if input then
+        local vmodel = input[1]
+        if vmodel ~= nil then
+            TriggerServerEvent("esx_adminmenu:server:SpawnVehicle", vmodel)
+        else
+            TriggerServerEvent("esx_adminmenu:server:SpawnVehicle", "baller2")
+        end
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:client:DeleteVehicle", function()
+    local input = lib.inputDialog("TS Admin Menu", {"Radius"})
+    if input then
+        local Radius = tonumber(input[1])
+        TriggerServerEvent("esx_adminmenu:server:DeleteVehicle", Radius)
+    end
 end)
 
 RegisterNetEvent("esx_adminmenu:SetArmor", function()
