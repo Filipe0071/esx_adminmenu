@@ -123,7 +123,7 @@ RegisterNetEvent("esx_adminmenu:noclip_menu", function()
 end)
 
 OpenPlayersMenu = function(data)
-    selectedPlayer = data.source
+    selectedPlayer = data.id
     print(selectedPlayer)
     lib.registerContext({
         id = "online_players_each",
