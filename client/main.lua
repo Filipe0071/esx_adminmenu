@@ -129,7 +129,11 @@ RegisterCommand("testcontext", function()
                 ["🕹 Teleport To Marker"] = {event = "esx_adminmenu:ttm"},
                 ["🕹 Teleport To Coords"] = {event = "esx_adminmenu:ttc"},
                 ["🕹 Clear Area"] = {event = "esx_adminmenu:ca"},
-                ["🕹 Relog"] = {serverEvent = "esx_multicharacter:relog"}
+                ["🕹 Relog"] = {serverEvent = "esx_multicharacter:relog"},
+                ["📲 Show Coords"] = {event = "esx_adminmenu:toggle_ShowCoords"},
+                ["🔍 Thermal Vision"] = {event = "esx_adminmenu:toggle_ThermalVision"},
+                ["🔍 Night Vision"] = {event = "esx_adminmenu:toggle_NightVision"},
+                ["🔍 Player Blips"] = {event = "esx_adminmenu:toggle_PlayerBlips"}
             }
         },
         {

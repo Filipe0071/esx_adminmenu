@@ -595,6 +595,68 @@ RegisterNetEvent("esx_adminmenu:toggle_FreezePlayer", function()
     end
 end)
 
+local DrawGenericText = function(text)
+    SetTextColour(186, 186, 186, 255)
+    SetTextFont(7)
+    SetTextScale(0.378, 0.378)
+    SetTextWrap(0.0, 1.0)
+    SetTextCentre(false)
+    SetTextDropshadow(0, 0, 0, 0, 255)
+    SetTextEdge(1, 0, 0, 0, 205)
+    SetTextEntry("STRING")
+    AddTextComponentString(text)
+    DrawText(0.40, 0.00)
+end
+
+local FormatCoord = function(coord)
+    if coord == nil then
+        return "unknown"
+    end
+    return tonumber(string.format("%.2f", coord))
+end
+
+local ShowCoords = false
+
+RegisterNetEvent("esx_adminmenu:toggle_ShowCoords", function()
+    if ShowCoords then
+        ShowCoords = false
+        ClearInterval(showcoordsint)
+    else
+        ShowCoords = true
+        showcoordsint = SetInterval(function()
+            local playerPed = PlayerPedId()
+            local playerX, playerY, playerZ = table.unpack(GetEntityCoords(playerPed))
+            local playerH = GetEntityHeading(playerPed)
+            DrawGenericText(("~g~X~w~: %s ~g~Y~w~: %s ~g~Z~w~: %s ~g~H~w~: %s"):format(FormatCoord(playerX),
+                FormatCoord(playerY), FormatCoord(playerZ), FormatCoord(playerH)))
+        end, 5)
+    end
+end)
+
+local ThermalVision = false
+
+RegisterNetEvent("esx_adminmenu:toggle_ThermalVision", function()
+    if ThermalVision then
+        ThermalVision = false
+        SetSeethrough(false)
+    else
+        ThermalVision = true
+        SetSeethrough(true)
+    end
+end)
+
+local NightVision = false
+
+RegisterNetEvent("esx_adminmenu:toggle_NightVision", function()
+    if NightVision then
+        NightVision = false
+        SetNightvision(false)
+    else
+        NightVision = true
+        SetNightvision(true)
+    end
+end)
+
 RegisterNetEvent("esx_adminmenu:client:ChangeSkin", function()
     TriggerServerEvent("esx_adminmenu:server:ChangeSkin", selectedPlayer)
 end)
