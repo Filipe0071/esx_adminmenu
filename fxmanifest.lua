@@ -10,8 +10,8 @@ server_scripts {"@oxmysql/lib/MySQL.lua", "server/*.lua"}
 
 client_scripts {"client/*.lua"}
 
-ui_page "ui/index.html"
+ui_page ("ui/index.html")
 
-files {"ui/*"}
+files ({"ui/*"})
 
 dependency "es_extended"

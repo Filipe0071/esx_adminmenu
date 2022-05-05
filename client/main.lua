@@ -1,33 +1,11 @@
 local fakeNotif = {
-    {
-        name = "Discord Call",
-        youtube_id = "n_WorPInSPQ",
-        volume = 25 -- 75% is the maximum.
-    }, {
-        name = "Discord Message",
-        youtube_id = "rIPq9Fl5r44",
-        volume = 20
-    }, {
-        name = "Skype Call",
-        youtube_id = "lVQI7CLus04",
-        volume = 25
-    }, {
-        name = "TS3 Hey Wake Up",
-        youtube_id = "s-KcXdYysTQ",
-        volume = 15
-    }, {
-        name = "Win10 Error",
-        youtube_id = "QkcEqzO_pus",
-        volume = 25
-    }, {
-        name = "Win10 USB",
-        youtube_id = "OOJi5zm9GYQ",
-        volume = 60
-    }, {
-        name = "Door Knocking",
-        youtube_id = "4Potjy81R3c",
-        volume = 60
-    }
+    {name = "Discord Call", youtube_id = "n_WorPInSPQ", volume = 25},
+    {name = "Discord Message", youtube_id = "rIPq9Fl5r44", volume = 20},
+    {name = "Skype Call", youtube_id = "lVQI7CLus04", volume = 25},
+    {name = "TS3 Hey Wake Up", youtube_id = "s-KcXdYysTQ", volume = 15},
+    {name = "Win10 Error", youtube_id = "QkcEqzO_pus", volume = 25},
+    {name = "Win10 USB", youtube_id = "OOJi5zm9GYQ", volume = 60},
+    {name = "Door Knocking", youtube_id = "4Potjy81R3c", volume = 60}
 }
 
 RegisterCommand("testcontext", function()
@@ -60,7 +38,7 @@ RegisterCommand("testcontext", function()
                 description = "Rockstar Settings"
             },
             ["🔬 Spectate Player"] = {
-                event = "openSpectateMenu",
+                serverEvent = "esx_adminmenu:server:openSpectateMenu",
                 description = "Spectate Player"
             }
         },
@@ -132,8 +110,7 @@ RegisterCommand("testcontext", function()
                 ["🕹 Relog"] = {serverEvent = "esx_multicharacter:relog"},
                 ["📲 Show Coords"] = {event = "esx_adminmenu:toggle_ShowCoords"},
                 ["🔍 Thermal Vision"] = {event = "esx_adminmenu:toggle_ThermalVision"},
-                ["🔍 Night Vision"] = {event = "esx_adminmenu:toggle_NightVision"},
-                ["🔍 Player Blips"] = {event = "esx_adminmenu:toggle_PlayerBlips"}
+                ["🔍 Night Vision"] = {event = "esx_adminmenu:toggle_NightVision"}
             }
         },
         {

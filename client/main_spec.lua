@@ -67,7 +67,6 @@ Panel = {
 			local targetPed = GetPlayerPed(GetPlayerFromServerId(serverId))
 			NetworkSetInSpectatorMode(true, targetPed)
 		end, serverId)
-
 		self:close()
 	end,
 	kick = function(self, data, cb)
@@ -117,7 +116,7 @@ end)
 RegisterCommand("spectateoff", function()
 	if Panel.selectedPlayer then
         lib.notify({
-            title = "Spectate Player",
+            title = "Player Spectate",
             description = "Spectate turned off",
             position = "top",
             duration = 5000,
