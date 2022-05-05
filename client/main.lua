@@ -152,7 +152,7 @@ OnlinePlayers = function()
         menu = "admin_menu",
         options = optionTable
     })
-    lib.showContext("each_player_option")
+    lib.showContext("online_players")
 end
 
 RegisterNetEvent("open_each_player", function(data)
