@@ -1,4 +1,4 @@
-# esx_adminmenu
+# [WIP] esx_adminmenu
 Admin Menu Inspired from ts-adminmenu
 
 ## DEPENDENCIES
