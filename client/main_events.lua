@@ -168,20 +168,12 @@ local noclip = false
 
 RegisterNetEvent("esx_adminmenu:toggle_noclip", function()
     if noclip then
-        TriggerEvent("esx_adminmenu:disable_noclip")
+        noclip = false
+        SetNoClip(false)
     else
-        TriggerEvent("esx_adminmenu:enable_noclip")
+        noclip = true
+        SetNoClip(true)
     end
-end)
-
-RegisterNetEvent("esx_adminmenu:enable_noclip", function()
-    noclip = true
-    SetNoClip(true)
-end)
-
-RegisterNetEvent("esx_adminmenu:disable_noclip", function()
-    noclip = false
-    SetNoClip(false)
 end)
 
 RegisterNetEvent("esx_adminmenu:client:ChangeSkin", function()
