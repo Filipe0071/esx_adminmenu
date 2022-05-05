@@ -211,7 +211,7 @@ OpenPlayersMenu = function(data)
         menu = "online_players",
         options = {
             ["💬 Change Skin"] = {event = "esx_adminmenu:client:ChangeSkin"},
-            ["Nothing here"] = {}
+            ["📂 Show Player Inventory"] = {event = "esx_adminmenu:OpenInvPlayer"}
         }
     })
     lib.showContext("online_players_each")

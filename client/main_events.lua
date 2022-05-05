@@ -164,6 +164,10 @@ RegisterNetEvent("esx_adminmenu:RevivePlayer", function()
     TriggerServerEvent("esx_adminmenu:server:RevivePlayer", GetPlayerServerId(PlayerId()))
 end)
 
+RegisterNetEvent("esx_adminmenu:OpenInvPlayer", function()
+    TriggerServerEvent('esx_adminmenu:server:ShowInventory', selectedPlayer)
+end)
+
 local noclip = false
 
 RegisterNetEvent("esx_adminmenu:toggle_noclip", function()

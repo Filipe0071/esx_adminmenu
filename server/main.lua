@@ -36,6 +36,16 @@ RegisterNetEvent("esx_adminmenu:server:ChangeSkin", function(ply)
     yPlayer.triggerEvent("esx_mroupa:openSaveableMenu")
 end)
 
+RegisterNetEvent('esx_adminmenu:server:ShowInventory', function(id)
+    local src = source
+    local Ply = id
+    --local allowed = CheckAllowed(src, 'OnlinePlyOptions_OpenInventory', 'OnlinePlyOptions')
+    --if allowed then
+        local inv = exports.ox_inventory:Inventory(tonumber(Ply))
+        TriggerClientEvent('ox_inventory:viewInventory', src, inv)
+    --end
+end)
+
 RegisterNetEvent("esx_adminmenu:server:TruckPunchlinePly", function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data.id)
