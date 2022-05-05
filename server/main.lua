@@ -30,12 +30,13 @@ RegisterNetEvent("esx_adminmenu:server:RevivePlayer", function(pid)
 end)
 
 local TSGetPlayers = function()
-    local players = ESX.GetExtendedPlayers()
+    local players = ESX.GetPlayers()
     local plylist = {}
     for i = 1, #players, 1 do
   	local plytable = {source = players[i], name = GetPlayerName(players[i])}
         table.insert(plylist, plytable)
     end
+    table.sort(plylist, function(a, b) return a.name:upper() < b.name:upper() end)
     return plylist
 end
 
