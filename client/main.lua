@@ -192,7 +192,7 @@ RegisterNetEvent("esx_adminmenu:client:TruckPunchlinePly", function()
         lib.registerContext({
             id = "online_players",
             title = "Online Players",
-            menu = "admin_menu",
+            menu = "troll_menu",
             options = optionTruckP
         })
         lib.showContext("online_players")
@@ -235,7 +235,7 @@ RegisterNetEvent("esx_adminmenu:client:FakeCallply", function(data)
         lib.registerContext({
             id = "online_players",
             title = "Online Players",
-            menu = "admin_menu",
+            menu = "troll_menu",
             options = optionTruckP
         })
         lib.showContext("online_players")
@@ -256,7 +256,7 @@ RegisterNetEvent("esx_adminmenu:client:Crashply", function()
         lib.registerContext({
             id = "online_players",
             title = "Online Players",
-            menu = "admin_menu",
+            menu = "troll_menu",
             options = optionCrash
         })
         lib.showContext("online_players")
