@@ -81,6 +81,7 @@ RegisterCommand("testcontext", function()
             id = "player_options",
             title = "🧍‍♂️ Player Options",
             menu = "player_related_options",
+            arrow = true,
             options = {
                 ["🪂 Toggle Noclip"] = {event = "esx_adminmenu:toggle_noclip"},
                 ["✨ Heal Player"] = {event = "esx_adminmenu:HealPlayer"},
@@ -89,6 +90,17 @@ RegisterCommand("testcontext", function()
                 ["👀 Invisible"] = {event = "esx_adminmenu:toggle_Invisible"},
                 ["🏃🏻‍♀️ Unlimited Stamina"] = {event = "esx_adminmenu:toggle_Stamina"},
                 ["🏃🏻 Fast Run"] = {event = "esx_adminmenu:toggle_FastRun"},
+                ["🏊🏻‍♂️ Fast Swim"] = {event = "esx_adminmenu:toggle_FastSwim"},
+                ["🏃‍♀️ Super Jump"] = {event = "esx_adminmenu:toggle_SuperJump"},
+                ["🏃‍♀️ No Ragdoll"] = {event = "esx_adminmenu:toggle_NoRagdoll"},
+                ["👮 Never Wanted"] = {event = "esx_adminmenu:toggle_NeverWanted"},
+                ["🚗 Stay In Vehicle"] = {event = "esx_adminmenu:toggle_StayInVehicle"},
+                ["🚿 Clean Player Clothes"] = {event = "esx_adminmenu:toggle_CleanPlayerClothes"},
+                ["🧺 Wet Player Clothes"] = {event = "esx_adminmenu:toggle_WetPlayerClothes"},
+                ["🔅 Dry Player Clothes"] = {event = "esx_adminmenu:toggle_DryPlayerClothes"},
+                ["💀 Commit Suicide"] = {event = "esx_adminmenu:toggle_CommitSuicide"},
+                ["🧊 Freeze Player"] = {event = "esx_adminmenu:toggle_FreezePlayer"},
+                ["💙 Set Armor"] = {event = "esx_adminmenu:SetArmor"},
             }
         },
         {
@@ -142,6 +154,26 @@ RegisterCommand("testcontext", function()
         },
     })
     lib.showContext("admin_menu")
+end)
+
+RegisterNetEvent("esx_adminmenu:SetArmor", function()
+    local input = lib.inputDialog("Set Armor", {
+        {
+            type = "select",
+            label = "Select Armor",
+            options = {
+                {value = "option1", ArmorValue = 20, label = "Super Light Armor"},
+                {value = "option2", ArmorValue = 40, label = "Light Armor"},
+                {value = "option3", ArmorValue = 60, label = "Standard Armor"},
+                {value = "option4", ArmorValue = 80, label = "Heavy Armor"},
+                {value = "option5", ArmorValue = 100, label = "Super Heavy Armor"},
+            }
+        }
+    })
+    if input then
+        SetPedArmour(PlayerPedId(), ArmorValue)
+        --print(GetPedArmour(PlayerPedId()))
+    end
 end)
 
 RegisterNetEvent("esx_adminmenu:client:TruckPunchlinePly", function()

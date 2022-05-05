@@ -349,6 +349,252 @@ RegisterNetEvent("esx_adminmenu:toggle_FastRun", function()
     end
 end)
 
+local FastSwim = false
+
+RegisterNetEvent("esx_adminmenu:toggle_FastSwim", function()
+    if FastSwim then
+        FastSwim = false
+        SetSwimMultiplierForPlayer(PlayerId(), 1.0)
+        lib.notify({
+            title = "Toggle FastSwim",
+            description = "FastSwim Disable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "red",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    else
+        FastSwim = true
+        SetSwimMultiplierForPlayer(PlayerId(), 1.49)
+        lib.notify({
+            title = "Toggle FastSwim",
+            description = "FastSwim Enable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "green",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    end
+end)
+
+local SuperJump = false
+
+RegisterNetEvent("esx_adminmenu:toggle_SuperJump", function()
+    if SuperJump then
+        SuperJump = false
+        ClearInterval(superjump)
+        lib.notify({
+            title = "Toggle SuperJump",
+            description = "SuperJump Disable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "red",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    else
+        SuperJump = true
+        superjump = SetInterval(function()
+            SetSuperJumpThisFrame(PlayerId())
+        end, 0)
+        lib.notify({
+            title = "Toggle SuperJump",
+            description = "SuperJump Enable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "green",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    end
+end)
+
+local NoRagdoll = false
+
+RegisterNetEvent("esx_adminmenu:toggle_NoRagdoll", function()
+    if NoRagdoll then
+        NoRagdoll = false
+        SetPedCanRagdollFromPlayerImpact(PlayerPedId(), true)
+        SetPedCanRagdoll(PlayerPedId(), true)
+        ClearInterval(ragdoll)
+        lib.notify({
+            title = "Toggle NoRagdoll",
+            description = "NoRagdoll Disable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "red",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    else
+        NoRagdoll = true
+        ragdoll = SetInterval(function()
+            SetPedCanRagdoll(PlayerPedId(), false)
+            SetPedCanRagdollFromPlayerImpact(PlayerPedId(), false)
+        end, 0)
+        lib.notify({
+            title = "Toggle NoRagdoll",
+            description = "NoRagdoll Enable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "green",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    end
+end)
+
+local NeverWanted = false
+
+RegisterNetEvent("esx_adminmenu:toggle_NeverWanted", function()
+    if NeverWanted then
+        NeverWanted = false
+        ClearInterval(wanted)
+        lib.notify({
+            title = "Toggle NeverWanted",
+            description = "NeverWanted Disable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "red",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    else
+        NeverWanted = true
+        wanted = SetInterval(function()
+            if GetPlayerWantedLevel(PlayerId()) > 0 then
+                ClearPlayerWantedLevel(PlayerId())
+            end
+        end, 100)
+        lib.notify({
+            title = "Toggle NeverWanted",
+            description = "NeverWanted Enable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "green",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    end
+end)
+
+local StayInVehicle = false
+
+RegisterNetEvent("esx_adminmenu:toggle_StayInVehicle", function()
+    if StayInVehicle then
+        StayInVehicle = false
+        SetPedCanBeDraggedOut(PlayerPedId(), true)
+        ClearInterval(stayinveh)
+        lib.notify({
+            title = "Toggle StayInVehicle",
+            description = "StayInVehicle Disable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "red",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    else
+        StayInVehicle = true
+        stayinveh = SetInterval(function()
+            SetPedCanBeDraggedOut(PlayerPedId(), false)
+        end, 0)
+        lib.notify({
+            title = "Toggle StayInVehicle",
+            description = "StayInVehicle Enable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "green",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:toggle_CleanPlayerClothes", function()
+    ClearPedBloodDamage(PlayerPedId())
+end)
+
+RegisterNetEvent("esx_adminmenu:toggle_WetPlayerClothes", function()
+    SetPedWetnessHeight(PlayerPedId(), 2.0)
+end)
+
+RegisterNetEvent("esx_adminmenu:toggle_DryPlayerClothes", function()
+    ClearPedWetness(PlayerPedId())
+end)
+
+RegisterNetEvent("esx_adminmenu:toggle_CommitSuicide", function()
+    SetEntityHealth(PlayerPedId(), 0.0)
+end)
+
+local FreezePlayer = false
+
+RegisterNetEvent("esx_adminmenu:toggle_FreezePlayer", function()
+    if FreezePlayer then
+        FreezePlayer = false
+        FreezeEntityPosition(PlayerPedId(), false)
+        lib.notify({
+            title = "Toggle FreezePlayer",
+            description = "FreezePlayer Disable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "red",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    else
+        FreezePlayer = true
+        FreezeEntityPosition(PlayerPedId(), true)
+        lib.notify({
+            title = "Toggle FreezePlayer",
+            description = "FreezePlayer Enable",
+            position = "top",
+            duration = 5000,
+            style = {
+                backgroundColor = "green",
+                color = "white"
+            },
+            icon = "fa-solid fa-circle-info",
+            iconColor = "white"
+        })
+    end
+end)
+
 RegisterNetEvent("esx_adminmenu:client:ChangeSkin", function()
     TriggerServerEvent("esx_adminmenu:server:ChangeSkin", selectedPlayer)
 end)
