@@ -36,6 +36,6 @@ ESX.RegisterServerCallback('esx_adminmenu:server:GetOnlinePlayers', function(sou
   	local plytable = {source = players[i], name = GetPlayerName(players[i])}
         table.insert(plylist, plytable)
     end
-    table.sort(plylist, function(a, b) return a.name:upper() < b.name:upper() end)
+    --table.sort(plylist, function(a, b) return a.name:upper() < b.name:upper() end)
     cb(plylist)
 end)
