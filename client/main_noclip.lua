@@ -5,15 +5,16 @@ local MOVE_LEFT_RIGHT = 30
 local MOVE_UP_DOWN = 31
 local NO_CLIP_NORMAL_SPEED = 0.5
 local NO_CLIP_FAST_SPEED = 0.1
+
 local index = 1
 
 local Speeds = {
-    { speed = 0.1, label ="Very Slow" },
-    { speed = 0.5, label ="Slow" },
-    { speed = 2, label ="Normal" },
-    { speed = 5, label ="Fast" },
-    { speed = 10, label ="Very Fast" },
-    { speed = 15, label ="Max Speed" },
+    {speed = 0.1, label ="Very Slow"},
+    {speed = 0.5, label ="Slow"},
+    {speed = 2, label ="Normal"},
+    {speed = 5, label ="Fast"},
+    {speed = 10, label ="Very Fast"},
+    {speed = 15, label ="Max Speed"},
 }
 
 ENABLE_TOGGLE_NO_CLIP = true
@@ -36,11 +37,17 @@ function ToggleNoClipMode()
     return SetNoClip(not isNoClipping)
 end
 
-function IsControlAlwaysPressed(inputGroup, control) return IsControlPressed(inputGroup, control) or IsDisabledControlPressed(inputGroup, control) end
+function IsControlAlwaysPressed(inputGroup, control)
+    return IsControlPressed(inputGroup, control) or IsDisabledControlPressed(inputGroup, control)
+end
 
-function IsControlAlwaysJustPressed(inputGroup, control) return IsControlJustPressed(inputGroup, control) or IsDisabledControlJustPressed(inputGroup, control) end
+function IsControlAlwaysJustPressed(inputGroup, control)
+    return IsControlJustPressed(inputGroup, control) or IsDisabledControlJustPressed(inputGroup, control)
+end
 
-function Lerp (a, b, t) return a + (b - a) * t end
+function Lerp(a, b, t)
+    return a + (b - a)*t
+end
 
 function IsPedDrivingVehicle(ped, veh)
     return ped == GetPedInVehicleSeat(veh, -1);
@@ -73,10 +80,7 @@ function SetNoClip(val)
         SetUserRadioControlEnabled(not isNoClipping);
         if (isNoClipping) then
             SetEntityAlpha(noClippingEntity, 51, 0)
-            --lib.showTextUI("LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED<br>Current Speed - "..Speeds[index].label, {
-                --position = "top-center"
-                --icon = "gas-pump",
-            --})
+            lib.showTextUI("LEFT SHIFT - GO IN CURRENT SPEED  \nH - CHANGE SPEED  \nCurrent Speed - "..Speeds[index].label, {position = "left-center" })
             Citizen.CreateThread(function()
                 local clipped = noClippingEntity
                 local pPed = playerPed;
@@ -96,20 +100,14 @@ function SetNoClip(val)
                     SetPoliceIgnorePlayer(pPed, true);
                     if IsControlJustPressed(0, 74) then
                         if index ~= #Speeds then
-                            --lib.hideTextUI()
+                            lib.hideTextUI()
                             index = index+1
                             NO_CLIP_FAST_SPEED = Speeds[index].speed
-                            --lib.showTextUI("LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED<br>Current Speed - "..Speeds[index].label, {
-                                --position = "top-center"
-                                --icon = "gas-pump",
-                            --})
+                            lib.showTextUI("LEFT SHIFT - GO IN CURRENT SPEED  \nH - CHANGE SPEED  \nCurrent Speed - "..Speeds[index].label, {position = "left-center"})
                         else
-                            --lib.hideTextUI()
+                            lib.hideTextUI()
                             NO_CLIP_FAST_SPEED = Speeds[1].speed
-                            --lib.showTextUI("LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED<br>Current Speed - "..Speeds[index].label, {
-                                --position = "top-center"
-                                --icon = "gas-pump",
-                            --})
+                            lib.showTextUI("LEFT SHIFT - GO IN CURRENT SPEED  \nH - CHANGE SPEED  \nCurrent Speed - "..Speeds[index].label, {position = "left-center"})
                             index = 1
                         end
                     end
@@ -153,7 +151,7 @@ function SetNoClip(val)
             end)
         else
             ResetEntityAlpha(noClippingEntity)
-            --lib.hideTextUI()
+            lib.hideTextUI()
         end
     end
 end
@@ -161,7 +159,7 @@ end
 function MoveInNoClip()
     SetEntityRotation(noClippingEntity, GetGameplayCamRot(0), 0, false)
     local forward, right, up, c = GetEntityMatrix(noClippingEntity);
-    previousVelocity = Lerp(previousVelocity, (((right * input.x * speed) + (up * -input.z * speed) + (forward * -input.y * speed))), Timestep() * breakSpeed);
+    previousVelocity = Lerp(previousVelocity, (((right*input.x*speed) + (up*-input.z*speed) + (forward*-input.y*speed))), Timestep()*breakSpeed);
     c = c + previousVelocity
     SetEntityCoordsNoOffset(noClippingEntity, c, true, true, false)
 end
@@ -169,7 +167,7 @@ end
 function MoveCarInNoClip()
     SetEntityRotation(noClippingEntity, GetGameplayCamRot(0), 0, false)
     local forward, right, up, c = GetEntityMatrix(noClippingEntity);
-    previousVelocity = Lerp(previousVelocity, (((right * input.x * speed) + (up * -input.z * speed) + (forward * -input.y * speed))), Timestep() * breakSpeed);
+    previousVelocity = Lerp(previousVelocity, (((right*input.x*speed) + (up*-input.z*speed) + (forward*-input.y*speed))), Timestep()*breakSpeed);
     c = c + previousVelocity
     SetEntityCoords(noClippingEntity, (c - offset) + (vec(0, 0, .3)), true, true, true, false)
 end
