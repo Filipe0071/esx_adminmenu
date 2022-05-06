@@ -4,7 +4,7 @@ Admin Menu Inspired from ts-adminmenu
 ## DEPENDENCIES
 - chHyperSound - https://github.com/charleshacks/chHyperSound
 - ox_lib - https://github.com/overextended/ox_lib
-- oxmysql is needed
+- oxmysql - https://github.com/overextended/oxmysql
 
 ## Credits
   - @tony-stark-17 - Original Menu https://github.com/tony-stark-17/ts-adminmenu
