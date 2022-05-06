@@ -154,6 +154,27 @@ RegisterNetEvent("esx_adminmenu:server:DeleteVehicle", function(radi)
     --end
 end)
 
+ESX.RegisterServerCallback("esx_adminmenu:server:GetJobs", function(source, cb)
+    local jobs = ESX.GetJobs()
+    cb(jobs)
+end)
+
+RegisterNetEvent("esx_adminmenu:server:SetJob", function(pid, job, grade)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local job = job
+    local grade = tonumber(grade)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    --local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_SetJob", "OnlinePlyOptions")
+    --if allowed then
+        if ESX.DoesJobExist(job, grade) then
+            yPlayer.setJob(job, grade)
+        else
+            --xPlayer.showNotification("Job or grade invalid!")
+        end
+    --else
+    --end
+end)
+
 ESX.RegisterServerCallback("esx_adminmenu:server:GetOnlinePlayers", function(source, cb)
     local players = ESX.GetPlayers()
     local plylist = {}

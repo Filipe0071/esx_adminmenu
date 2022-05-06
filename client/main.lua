@@ -271,7 +271,8 @@ OpenPlayersMenu = function(data)
         menu = "online_players",
         options = {
             ["💬 Change Skin"] = {event = "esx_adminmenu:client:ChangeSkin"},
-            ["📂 Show Player Inventory"] = {event = "esx_adminmenu:OpenInvPlayer"}
+            ["📂 Show Player Inventory"] = {event = "esx_adminmenu:OpenInvPlayer"},
+            ["📗 Set Job"] = {event = "esx_adminmenu:client:GetJobs"}
         }
     })
     lib.showContext("online_players_each")
@@ -297,6 +298,41 @@ OnlinePlayers = function()
         lib.showContext("online_players")
     end)
 end
+
+RegisterNetEvent("esx_adminmenu:client:GetJobs", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:GetJobs", function(jobs)
+        local getJobsTable = {}
+        for k, v in pairs(jobs) do
+            local grade = 0
+            for i, j in pairs(v.grades) do
+                grade = grade + 1
+            end
+            getJobsTable[v.label.." - "..v.name] = {
+                description = "Grades = " .. grade - 1,
+                arrow = true,
+                event = "esx_adminmenu:client:setgrade",
+                args = {job = v.name, max = grade}
+            }
+        end
+        lib.registerContext({
+            id = "getjobs",
+            title = "Online Players",
+            menu = "online_players",
+            options = getJobsTable
+        })
+        lib.showContext("getjobs")
+    end)
+end)
+
+RegisterNetEvent("esx_adminmenu:client:setgrade", function(data)
+    local job = data.job
+    local max = tonumber(data.max) - 1
+    local input = lib.inputDialog("TS Admin Menu", {"Max Grade: " .. max})
+    if input then
+        local maxGrade = tonumber(input[1])
+        TriggerServerEvent("esx_adminmenu:server:SetJob", selectedPlayer, job, maxGrade)
+    end
+end)
 
 RegisterNetEvent("open_each_player", function(data)
     OpenPlayersMenu(data)
