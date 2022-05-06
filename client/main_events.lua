@@ -168,6 +168,14 @@ RegisterNetEvent("esx_adminmenu:OpenInvPlayer", function()
     TriggerServerEvent("esx_adminmenu:server:ShowInventory", selectedPlayer)
 end)
 
+RegisterNetEvent("esx_adminmenu:KillPlayer", function()
+    TriggerServerEvent('esx_adminmenu:server:KillPlayer', selectedPlayer)
+end)
+
+RegisterNetEvent('esx_adminmenu:client:Kill', function()
+    SetEntityHealth(PlayerPedId(), 0)
+end)
+
 local noclip = false
 
 RegisterNetEvent("esx_adminmenu:toggle_noclip", function()

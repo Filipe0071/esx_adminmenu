@@ -46,6 +46,16 @@ RegisterNetEvent("esx_adminmenu:server:ShowInventory", function(id)
     --end
 end)
 
+RegisterNetEvent('esx_adminmenu:server:KillPlayer', function(pid)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    --local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_KillPlayer', 'OnlinePlyOptions')
+    --if allowed then
+        TriggerClientEvent('esx_adminmenu:client:Kill', yPlayer.source)
+    --else
+    --end
+end)
+
 RegisterNetEvent("esx_adminmenu:server:TruckPunchlinePly", function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data.id)
@@ -171,6 +181,19 @@ RegisterNetEvent("esx_adminmenu:server:SetJob", function(pid, job, grade)
         else
             --xPlayer.showNotification("Job or grade invalid!")
         end
+    --else
+    --end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:GiveItem", function(pid, item, count)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local playerId = pid
+    local titem = item
+    local amount = count
+    local yPlayer = ESX.GetPlayerFromId(playerId)
+    --local allowed = CheckAllowed(source, "OnlinePlyOptions_GiveItem", "OnlinePlyOptions") or CheckAllowed(source, "OnlinePlyOptions_GiveItemName", "OnlinePlyOptions")
+    --if allowed then
+        exports.ox_inventory:AddItem(yPlayer.playerId, titem, amount, nil, nil, nil)
     --else
     --end
 end)

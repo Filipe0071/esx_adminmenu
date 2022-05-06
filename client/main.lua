@@ -272,7 +272,9 @@ OpenPlayersMenu = function(data)
         options = {
             ["💬 Change Skin"] = {event = "esx_adminmenu:client:ChangeSkin"},
             ["📂 Show Player Inventory"] = {event = "esx_adminmenu:OpenInvPlayer"},
-            ["📗 Set Job"] = {event = "esx_adminmenu:client:GetJobs"}
+            ["📗 Set Job"] = {event = "esx_adminmenu:client:GetJobs"},
+            ["🎁 Give Player Item"] = {event = "esx_adminmenu:client:GetItems"},
+            ["🔪 Kill Player"] = {event = "esx_adminmenu:KillPlayer"}
         }
     })
     lib.showContext("online_players_each")
@@ -331,6 +333,36 @@ RegisterNetEvent("esx_adminmenu:client:setgrade", function(data)
     if input then
         local maxGrade = tonumber(input[1])
         TriggerServerEvent("esx_adminmenu:server:SetJob", selectedPlayer, job, maxGrade)
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:client:GetItems", function()
+    local Items = exports.ox_inventory:Items()
+    local getItemsTable = {}
+    for k, v in pairs(Items) do
+        getItemsTable[v.label] = {
+            description = "Give " .. v.name,
+            arrow = true,
+            event = "esx_adminmenu:client:GiveItem",
+            args = {item = v.name, plyid = selectedPlayer}
+        }
+    end
+    lib.registerContext({
+        id = "getItems",
+        title = "Online Players",
+        menu = "online_players",
+        options = getItemsTable
+    })
+    lib.showContext("getItems")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:GiveItem", function(data)
+    local player = data.plyid
+    local item = data.item
+    local input = lib.inputDialog("TS Admin Menu Give Item", {"Count"})
+    if input then
+        local count = tonumber(input[1])
+        TriggerServerEvent("esx_adminmenu:server:GiveItem", player, item, count)
     end
 end)
 
