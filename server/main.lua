@@ -35,6 +35,21 @@ RegisterNetEvent("onResourceStart", function()
                 TSAdmins[j].permission.OnlinePlyOptions_SetJob = true
             end
         end
+        for i, j in ipairs(OnlinePlyOptions_GiveItem) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_GiveItem = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_RemoveInventoryItem) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_RemoveInventoryItem = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_GiveMoney) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_GiveMoney = true
+            end
+        end
     end
 end)
 
@@ -206,7 +221,7 @@ RegisterNetEvent("esx_adminmenu:server:SendMessage", function(pid, msg)
     if allowed then
         print(xPlayer.getName(), msg)
     else
-        --print("tu n és admin")
+        print("tu n és admin")
     end
 end)
 
@@ -217,7 +232,7 @@ RegisterNetEvent("esx_adminmenu:server:ChangeSkin", function(ply)
     if allowed then
         yPlayer.triggerEvent("esx_mroupa:openSaveableMenu")
     else
-        --print("tu n és admin")
+        print("tu n és admin")
     end
 end)
 
@@ -229,11 +244,70 @@ RegisterNetEvent("esx_adminmenu:server:ShowInventory", function(ply)
         local inv = exports.ox_inventory:Inventory(tonumber(Ply))
         TriggerClientEvent("ox_inventory:viewInventory", src, inv)
     else
-        --print("tu n és admin")
+        print("tu n és admin")
     end
 end)
 
 ESX.RegisterServerCallback("esx_adminmenu:server:GetJobs", function(source, cb)
     local jobs = ESX.GetJobs()
     cb(jobs)
+end)
+
+RegisterNetEvent("esx_adminmenu:server:GiveItem", function(pid, item, count)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local playerId = pid
+    local titem = item
+    local amount = count
+    local yPlayer = ESX.GetPlayerFromId(playerId)
+    local allowed = CheckAllowed(source, "OnlinePlyOptions_GiveItem", "OnlinePlyOptions")
+    if allowed then
+        exports.ox_inventory:AddItem(yPlayer.playerId, titem, amount, nil, nil, nil)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:GetItems", function(pid)
+    local src = source
+    local playerId = pid
+    local yPlayer = ESX.GetPlayerFromId(playerId)
+    local item = exports.ox_inventory:Inventory(playerId).items
+    local allowed = CheckAllowed(source, "OnlinePlyOptions_RemoveInventoryItem", "OnlinePlyOptions")
+    if allowed then
+        table.sort(item, function(a, b)
+            return a.name:upper() < b.name:upper()
+        end)
+        TriggerClientEvent("esx_adminmenu:client:RemoveItem", src, pid, item)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:RemoveItem", function(pid, item, count)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local playerId = pid
+    local yPlayer = ESX.GetPlayerFromId(playerId)
+    local titem = item
+    local amount = count
+    local allowed = CheckAllowed(source, "OnlinePlyOptions_RemoveInventoryItem", "OnlinePlyOptions")
+    if allowed then
+        exports.ox_inventory:RemoveItem(yPlayer.playerId, titem, amount, nil, nil)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:GiveAccMoney", function(pid, acc, amount)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_GiveMoney", "OnlinePlyOptions")
+    local account = acc
+    local money = tonumber(amount)
+    if allowed then
+        if account == "money" or account == "bank" or account == "black_money" then
+            yPlayer.addAccountMoney(account, money)
+        end
+    else
+        print("tu n és admin")
+    end
 end)
