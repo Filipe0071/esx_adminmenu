@@ -74,7 +74,7 @@ RegisterNetEvent("esx_adminmenu:OpenPlayersMenu", function(data)
     end, "OnlinePlyOptions")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:SendMessage", function(data)
+RegisterNetEvent("esx_adminmenu:client:SendMessage", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local input = lib.inputDialog("TS Admin Menu", {"Message"})
@@ -91,7 +91,7 @@ RegisterNetEvent("esx_adminmenu:client:SendMessage", function(data)
     end, "OnlinePlyOptions_SendMessage")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:ChangeSkin", function(data)
+RegisterNetEvent("esx_adminmenu:client:ChangeSkin", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:ChangeSkin", selectedPlayer)
@@ -101,7 +101,7 @@ RegisterNetEvent("esx_adminmenu:client:ChangeSkin", function(data)
     end, "OnlinePlyOptions_ChangeSkin")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:ShowInventory", function(data)
+RegisterNetEvent("esx_adminmenu:client:ShowInventory", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:ShowInventory", selectedPlayer)
@@ -111,7 +111,7 @@ RegisterNetEvent("esx_adminmenu:client:ShowInventory", function(data)
     end, "OnlinePlyOptions_OpenInventory")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:GetJobs", function(data)
+RegisterNetEvent("esx_adminmenu:client:GetJobs", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             ESX.TriggerServerCallback("esx_adminmenu:server:GetJobs", function(jobs)
@@ -175,7 +175,7 @@ RegisterNetEvent("esx_adminmenu:GiveItem", function(data)
     end, "OnlinePlyOptions_GiveItem")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:GiveItem", function(data)
+RegisterNetEvent("esx_adminmenu:client:GiveItem", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local Items = exports.ox_inventory:Items()
@@ -196,7 +196,7 @@ RegisterNetEvent("esx_adminmenu:client:GiveItem", function(data)
     end, "OnlinePlyOptions_GiveItem")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:GetItems", function(data)
+RegisterNetEvent("esx_adminmenu:client:GetItems", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:GetItems", selectedPlayer)
@@ -247,7 +247,7 @@ RegisterNetEvent("esx_adminmenu:client:RemoveItem", function(ply, list)
     end, "OnlinePlyOptions_RemoveInventoryItem")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:GiveAccountMoney", function(data)
+RegisterNetEvent("esx_adminmenu:client:GiveAccountMoney", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local input = lib.inputDialog("Give Account Money - TSADMIN", {"Account Name (money, bank, black_money)", "Amount"})
@@ -265,7 +265,7 @@ RegisterNetEvent("esx_adminmenu:client:GiveAccountMoney", function(data)
     end, "OnlinePlyOptions_GiveMoney")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:RemoveAccountMoney", function(data)
+RegisterNetEvent("esx_adminmenu:client:RemoveAccountMoney", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local input = lib.inputDialog("Remove Account Money - TSADMIN", {"Account Name (money, bank, black_money)", "Amount"})
@@ -283,7 +283,7 @@ RegisterNetEvent("esx_adminmenu:client:RemoveAccountMoney", function(data)
     end, "OnlinePlyOptions_RemoveMoney")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:ToggleLicense", function(data)
+RegisterNetEvent("esx_adminmenu:client:ToggleLicense", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local input = lib.inputDialog("TS Admin Menu - License Manager", {"License Name"})
@@ -300,7 +300,7 @@ RegisterNetEvent("esx_adminmenu:client:ToggleLicense", function(data)
     end, "OnlinePlyOptions_License")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:HealPlayer", function(data)
+RegisterNetEvent("esx_adminmenu:client:HealPlayer", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:HealPlayer", selectedPlayer)
@@ -310,7 +310,7 @@ RegisterNetEvent("esx_adminmenu:client:HealPlayer", function(data)
     end, "OnlinePlyOptions_Heal")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:RevivePlayer", function(data)
+RegisterNetEvent("esx_adminmenu:client:RevivePlayer", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:RevivePlayer", selectedPlayer)
@@ -320,7 +320,7 @@ RegisterNetEvent("esx_adminmenu:client:RevivePlayer", function(data)
     end, "OnlinePlyOptions_Revive")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:Goto", function(data)
+RegisterNetEvent("esx_adminmenu:client:Goto", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:Goto", selectedPlayer)
@@ -330,7 +330,7 @@ RegisterNetEvent("esx_adminmenu:client:Goto", function(data)
     end, "OnlinePlyOptions_Goto")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:Bring", function(data)
+RegisterNetEvent("esx_adminmenu:client:Bring", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:Bring", selectedPlayer)
@@ -340,7 +340,7 @@ RegisterNetEvent("esx_adminmenu:client:Bring", function(data)
     end, "OnlinePlyOptions_Bring")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:PrintID", function(data)
+RegisterNetEvent("esx_adminmenu:client:PrintID", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:PrintID", selectedPlayer)
@@ -354,7 +354,7 @@ RegisterNetEvent("esx_adminmenu:PrintID", function(steamid, license, xbl, ip, di
     print(steamid, license, xbl, ip, discord, liveid)
 end)
 
-RegisterNetEvent("esx_adminmenu:client:KillPlayer", function(data)
+RegisterNetEvent("esx_adminmenu:client:KillPlayer", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:KillPlayer", selectedPlayer)
@@ -364,7 +364,7 @@ RegisterNetEvent("esx_adminmenu:client:KillPlayer", function(data)
     end, "OnlinePlyOptions_KillPlayer")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:Kill", function(data)
+RegisterNetEvent("esx_adminmenu:client:Kill", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             SetEntityHealth(PlayerPedId(), 0)
@@ -374,7 +374,7 @@ RegisterNetEvent("esx_adminmenu:client:Kill", function(data)
     end, "OnlinePlyOptions_KillPlayer")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:KickPlayer", function(data)
+RegisterNetEvent("esx_adminmenu:client:KickPlayer", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:KickPlayer", selectedPlayer)
@@ -384,7 +384,7 @@ RegisterNetEvent("esx_adminmenu:client:KickPlayer", function(data)
     end, "OnlinePlyOptions_KickPlayer")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:ScreenShopPlayer", function(data)
+RegisterNetEvent("esx_adminmenu:client:ScreenShopPlayer", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             exports["screenshot-basic"]:requestScreenshotUpload("https://discord.com/api/webhooks/974002549835333702/qasfRoc_k4xPXHSJDOPZNl20FKbon_hRayZhyRD-CgGdzOAng-MXx631sKwFkQyiAB-f", "files[]", function(data) end)
@@ -394,7 +394,7 @@ RegisterNetEvent("esx_adminmenu:client:ScreenShopPlayer", function(data)
     end, "OnlinePlyOptions_ScreenShopPlayer")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:SpectatePlayer", function(data)
+RegisterNetEvent("esx_adminmenu:client:SpectatePlayer", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             lib.callback("esx_adminmenu:server:GetSpectateData", false, function(data)
@@ -495,7 +495,7 @@ RegisterNetEvent("esx_adminmenu:VehiclesRelatedOptionsMenu", function()
     end, "VehicleRelatedOptions")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:DeleteVehicle", function(data)
+RegisterNetEvent("esx_adminmenu:client:DeleteVehicle", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local input = lib.inputDialog("TS Admin Menu", {"Radius"})
@@ -524,7 +524,7 @@ RegisterNetEvent("esx_adminmenu:client:UnlockVehicle", function()
     end, "VehicleRelatedOptions_UnlockVehicle")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:SpawnCustomVehicle", function(data)
+RegisterNetEvent("esx_adminmenu:client:SpawnCustomVehicle", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local input = lib.inputDialog("TS Admin Menu", {"Vehicle Code"})
@@ -611,7 +611,7 @@ RegisterNetEvent("esx_adminmenu:toggle_Engine", function()
     end, "VehicleRelatedOptions_Engine")
 end)
 
-RegisterNetEvent("esx_adminmenu:ChangeNumberPlate", function(data)
+RegisterNetEvent("esx_adminmenu:ChangeNumberPlate", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local input = lib.inputDialog("TS Admin Menu", {"Number Plate Text"})
@@ -632,7 +632,7 @@ RegisterNetEvent("esx_adminmenu:ChangeNumberPlate", function(data)
     end, "VehicleRelatedOptions_ChangeNumberPlate")
 end)
 
-RegisterNetEvent("esx_adminmenu:FlipVehicle", function(data)
+RegisterNetEvent("esx_adminmenu:FlipVehicle", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local ped = PlayerPedId()
@@ -644,7 +644,7 @@ RegisterNetEvent("esx_adminmenu:FlipVehicle", function(data)
     end, "VehicleRelatedOptions_FlipVehicle")
 end)
 
-RegisterNetEvent("esx_adminmenu:DeleteVehiclePlayer", function(data)
+RegisterNetEvent("esx_adminmenu:DeleteVehiclePlayer", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:DeleteVehicle")
@@ -702,7 +702,7 @@ RegisterNetEvent("esx_adminmenu:VehicleGodMode", function()
     end, "VehicleRelatedOptions_VehicleGodMode")
 end)
 
-RegisterNetEvent("esx_adminmenu:RepairVehicle", function(data)
+RegisterNetEvent("esx_adminmenu:RepairVehicle", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local veh = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -716,7 +716,7 @@ RegisterNetEvent("esx_adminmenu:RepairVehicle", function(data)
     end, "VehicleRelatedOptions_RepairVehicle")
 end)
 
-RegisterNetEvent("esx_adminmenu:WashVehicle", function(data)
+RegisterNetEvent("esx_adminmenu:WashVehicle", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local veh = GetVehiclePedIsIn(PlayerPedId(), false)
