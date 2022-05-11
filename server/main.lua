@@ -255,6 +255,36 @@ RegisterNetEvent("onResourceStart", function()
                 TSAdmins[j].permission.PlayerRelatedOptions_ChangePed = true
             end
         end
+        for i, j in ipairs(MiscSettings) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.MiscSettings = true
+            end
+        end
+        for i, j in ipairs(MiscSettings_ttc) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.MiscSettings_ttc = true
+            end
+        end
+        for i, j in ipairs(MiscSettings_ShowCoords) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.MiscSettings_ShowCoords = true
+            end
+        end
+        for i, j in ipairs(MiscSettings_ClearArea) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.MiscSettings_ClearArea = true
+            end
+        end
+        for i, j in ipairs(MiscSettings_ThermalVision) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.MiscSettings_ThermalVision = true
+            end
+        end
+        for i, j in ipairs(MiscSettings_NightVision) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.MiscSettings_NightVision = true
+            end
+        end
     end
 end)
 

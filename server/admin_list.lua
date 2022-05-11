@@ -53,3 +53,10 @@ PlayerRelatedOptions_CommitSuicide = {}
 PlayerRelatedOptions_FeezePlayer = {}
 PlayerRelatedOptions_Noclip = {}
 PlayerRelatedOptions_ChangePed = {}
+
+MiscSettings = {}
+MiscSettings_ttc = {}
+MiscSettings_ShowCoords = {}
+MiscSettings_ClearArea = {}
+MiscSettings_ThermalVision = {}
+MiscSettings_NightVision = {}

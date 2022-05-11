@@ -8,7 +8,7 @@ RegisterCommand("tsadmin", function()
                     ["🧍‍♂️ Online Players"] = {event = "esx_adminmenu:OnlinePlayers", description = "Show Online Players"},
                     ["🧍‍♂️ Player Related Options"] = {event = "esx_adminmenu:PlayerRelatedOptionsMenu", description = "Show Player Related Options"},
                     ["🚙 Vehicle Related Options"] = {event = "esx_adminmenu:VehiclesRelatedOptionsMenu", description = "Show Vehicle Related Options"},
-                    ["🚧 Misc Settings"] = {description = "Misc Settings"},
+                    ["🚧 Misc Settings"] = {event = "esx_adminmenu:MiscOptions", description = "Misc Settings"},
                     ["🚧 Troll Menu"] = {description = "Open Troll Menu"},
                     ["📸 Rockstar Editor"] = {description = "Rockstar Settings"}
                 }
@@ -1098,10 +1098,145 @@ RegisterNetEvent("esx_adminmenu:client:ChangePed", function()
             local input = lib.inputDialog("TS Admin Menu", {"Model Name"})
             if input then
                 local ped = input[1]
+                if ped == nil then
+                    return
+                end
                 SetPlayerSkin(ped)
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
     end, "PlayerRelatedOptions_ChangePed")
+end)
+
+RegisterNetEvent("esx_adminmenu:MiscOptions", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.registerContext({
+                id = "misc_settings",
+                title = "🚧 Misc Settings",
+                menu = "admin_menu",
+                options = {
+                    ["🕹 Teleport To Coords"] = {event = "esx_adminmenu:client:TTC", description = "Teleport To Coords"},
+                    ["📲 Show Coords"] = {event = "esx_adminmenu:toggle_coords", description = "Show Coords"},
+                    ["🕹 Clear Area"] = {event = "esx_adminmenu:ClearArea", description = "Clear Area"},
+                    ["🕹 Relog"] = {serverEvent = "esx_multicharacter:relog", description = "Relog from Server"},
+                    ["🔍 Thermal Vision"] = {event = "esx_adminmenu:toggle_thermalvision", description = "Thermal Vision"},
+                    ["🔍 Night Vision"] = {event = "esx_adminmenu:toggle_nightvision", description = "Thermal Vision"}
+                }
+            })
+            lib.showContext("misc_settings")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "MiscSettings")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:TTC", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local input = lib.inputDialog("TS Admin Menu", {"Coords X", "Coords Y", "Coords Z"})
+            if input then
+                local cx = tonumber(input[1])
+                local cy = tonumber(input[2])
+                local cz = tonumber(input[3])
+                if cx == nil or cy == nil or cz == nil then
+                    return
+                end
+                SetPedCoordsKeepVehicle(PlayerPedId(), vec3(tonumber(cx), tonumber(cy), tonumber(cz)))
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "MiscSettings_ttc")
+end)
+
+local DrawGenericText = function(text)
+    SetTextColour(186, 186, 186, 255)
+    SetTextFont(7)
+    SetTextScale(0.378, 0.378)
+    SetTextWrap(0.0, 1.0)
+    SetTextCentre(false)
+    SetTextDropshadow(0, 0, 0, 0, 255)
+    SetTextEdge(1, 0, 0, 0, 205)
+    SetTextEntry("STRING")
+    AddTextComponentString(text)
+    DrawText(0.40, 0.00)
+end
+
+local FormatCoord = function(coord)
+    if coord == nil then
+        return "unknown"
+    end
+    return tonumber(string.format("%.2f", coord))
+end
+
+local ShowCoords = false
+
+RegisterNetEvent("esx_adminmenu:toggle_coords", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if ShowCoords then
+                ShowCoords = false
+                ClearInterval(showcoordsint)
+            else
+                ShowCoords = true
+                showcoordsint = SetInterval(function()
+                    local playerPed = PlayerPedId()
+                    local playerX, playerY, playerZ = table.unpack(GetEntityCoords(playerPed))
+                    local playerH = GetEntityHeading(playerPed)
+                    DrawGenericText(("~g~X~w~: %s ~g~Y~w~: %s ~g~Z~w~: %s ~g~H~w~: %s"):format(FormatCoord(playerX), FormatCoord(playerY), FormatCoord(playerZ), FormatCoord(playerH)))
+                end, 5)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "MiscSettings_ShowCoords")
+end)
+
+RegisterNetEvent("esx_adminmenu:ClearArea", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local coords = GetEntityCoords(PlayerPedId())
+            ClearAreaLeaveVehicleHealth(coords.x, coords.y, coords.z, 100.0, false, false, false, false)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "MiscSettings_ClearArea")
+end)
+
+local ThermalVision = false
+
+RegisterNetEvent("esx_adminmenu:toggle_thermalvision", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if ThermalVision then
+                ThermalVision = false
+                SetSeethrough(false)
+            else
+                ThermalVision = true
+                SetSeethrough(true)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "MiscSettings_ThermalVision")
+end)
+
+local NightVision = false
+
+RegisterNetEvent("esx_adminmenu:toggle_nightvision", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if NightVision then
+                NightVision = false
+                SetNightvision(false)
+            else
+                NightVision = true
+                SetNightvision(true)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "MiscSettings_NightVision")
 end)
