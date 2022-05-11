@@ -8,7 +8,6 @@ Admin Menu Inspired from ts-adminmenu
 
 ## Credits
   - @tony-stark-17 - Original Menu https://github.com/tony-stark-17/ts-adminmenu
-  - @CsokiHUN - Implemented spectate option from his repo  https://github.com/CsokiHUN/fl_spectate
   - @MiiMii1205 - Noclip feature https://github.com/MiiMii1205/noclipper
 
 ## SCREENSHOTS
