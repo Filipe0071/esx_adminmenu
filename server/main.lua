@@ -105,6 +105,26 @@ RegisterNetEvent("onResourceStart", function()
                 TSAdmins[j].permission.OnlinePlyOptions_SpectatePlayer = true
             end
         end
+        for i, j in ipairs(VehicleRelatedOptions) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_DeleteVehicle) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_DeleteVehicle = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_UnlockVehicle) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_UnlockVehicle = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_SpawnCustomVehicle) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_SpawnCustomVehicle = true
+            end
+        end
     end
 end)
 
@@ -272,7 +292,7 @@ RegisterNetEvent("esx_adminmenu:server:SendMessage", function(pid, msg)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
     local message = msg
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_SendMessage", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_SendMessage")
     if allowed then
         print(xPlayer.getName(), msg)
     else
@@ -283,7 +303,7 @@ end)
 RegisterNetEvent("esx_adminmenu:server:ChangeSkin", function(ply)
     local yPlayer = ESX.GetPlayerFromId(ply)
     local xPlayer = ESX.GetPlayerFromId(source)
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_ChangeSkin", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_ChangeSkin")
     if allowed then
         yPlayer.triggerEvent("esx_mroupa:openSaveableMenu")
     else
@@ -294,7 +314,7 @@ end)
 RegisterNetEvent("esx_adminmenu:server:ShowInventory", function(ply)
     local src = source
     local Ply = ply
-    local allowed = CheckAllowed(src, "OnlinePlyOptions_OpenInventory", "OnlinePlyOptions")
+    local allowed = CheckAllowed(src, "OnlinePlyOptions_OpenInventory")
     if allowed then
         local inv = exports.ox_inventory:Inventory(tonumber(Ply))
         TriggerClientEvent("ox_inventory:viewInventory", src, inv)
@@ -314,7 +334,7 @@ RegisterNetEvent("esx_adminmenu:server:GiveItem", function(pid, item, count)
     local titem = item
     local amount = count
     local yPlayer = ESX.GetPlayerFromId(playerId)
-    local allowed = CheckAllowed(source, "OnlinePlyOptions_GiveItem", "OnlinePlyOptions")
+    local allowed = CheckAllowed(source, "OnlinePlyOptions_GiveItem")
     if allowed then
         exports.ox_inventory:AddItem(yPlayer.playerId, titem, amount, nil, nil, nil)
     else
@@ -327,7 +347,7 @@ RegisterNetEvent("esx_adminmenu:server:GetItems", function(pid)
     local playerId = pid
     local yPlayer = ESX.GetPlayerFromId(playerId)
     local item = exports.ox_inventory:Inventory(playerId).items
-    local allowed = CheckAllowed(source, "OnlinePlyOptions_RemoveInventoryItem", "OnlinePlyOptions")
+    local allowed = CheckAllowed(source, "OnlinePlyOptions_RemoveInventoryItem")
     if allowed then
         table.sort(item, function(a, b)
             return a.name:upper() < b.name:upper()
@@ -344,7 +364,7 @@ RegisterNetEvent("esx_adminmenu:server:RemoveItem", function(pid, item, count)
     local yPlayer = ESX.GetPlayerFromId(playerId)
     local titem = item
     local amount = count
-    local allowed = CheckAllowed(source, "OnlinePlyOptions_RemoveInventoryItem", "OnlinePlyOptions")
+    local allowed = CheckAllowed(source, "OnlinePlyOptions_RemoveInventoryItem")
     if allowed then
         exports.ox_inventory:RemoveItem(yPlayer.playerId, titem, amount, nil, nil)
     else
@@ -355,7 +375,7 @@ end)
 RegisterNetEvent("esx_adminmenu:server:GiveAccMoney", function(pid, acc, amount)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_GiveMoney", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_GiveMoney")
     local account = acc
     local money = tonumber(amount)
     if allowed then
@@ -370,7 +390,7 @@ end)
 RegisterNetEvent("esx_adminmenu:server:RemoveAccMoney", function(pid, acc, amount)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_RemoveMoney", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_RemoveMoney")
     local account = acc
     local money = tonumber(amount)
     if allowed then
@@ -388,7 +408,7 @@ RegisterNetEvent("esx_adminmenu:server:ToggleLicense", function(playerId, licens
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(playerId)
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_License", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_License")
     if allowed then
         local found = false
         TriggerEvent("esx_license:getLicensesList", function(licenses)
@@ -419,7 +439,7 @@ end)
 RegisterNetEvent("esx_adminmenu:server:HealPlayer", function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Heal", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Heal")
     if allowed then
         yPlayer.triggerEvent("esx_basicneeds:healPlayer")
     else
@@ -430,7 +450,7 @@ end)
 RegisterNetEvent("esx_adminmenu:server:RevivePlayer", function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Revive", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Revive")
     if allowed then
         yPlayer.triggerEvent("esx_ambulancejob:revive")
     else
@@ -441,7 +461,7 @@ end)
 RegisterNetEvent("esx_adminmenu:server:Goto", function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Goto", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Goto")
     local yPlyCoords = yPlayer.getCoords()
     if allowed then
         xPlayer.setCoords(yPlyCoords)
@@ -454,7 +474,7 @@ RegisterNetEvent("esx_adminmenu:server:Bring", function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
     local xPlyCoords = xPlayer.getCoords()
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Bring", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Bring")
     if allowed then
         yPlayer.setCoords(xPlyCoords)
     else
@@ -465,7 +485,7 @@ end)
 RegisterNetEvent("esx_adminmenu:server:PrintID", function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_PRINTID", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_PRINTID")
     local steamid, license, xbl, ip, discord, liveid = nil, nil, nil, nil, nil, nil
     if allowed then
         for k, v in pairs(GetPlayerIdentifiers(yPlayer.source)) do
@@ -492,7 +512,7 @@ end)
 RegisterNetEvent("esx_adminmenu:server:KillPlayer", function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_KillPlayer", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_KillPlayer")
     if allowed then
         TriggerClientEvent("esx_adminmenu:client:Kill", yPlayer.source)
     else
@@ -503,7 +523,7 @@ end)
 RegisterNetEvent("esx_adminmenu:server:KickPlayer", function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_KickPlayer", "OnlinePlyOptions")
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_KickPlayer")
     if allowed then
         yPlayer.kick("You Have been kicked from the server by: " .. xPlayer.getName())
     else
@@ -512,8 +532,77 @@ RegisterNetEvent("esx_adminmenu:server:KickPlayer", function(pid)
 end)
 
 lib.callback.register("esx_adminmenu:server:GetSpectateData", function(source, pid)
-    local src = source
-    local target = pid
-    local pCoords = GetEntityCoords(GetPlayerPed(target))
-    return pCoords
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_SpectatePlayer")
+    if allowed then
+        local src = source
+        local target = pid
+        local pCoords = GetEntityCoords(GetPlayerPed(target))
+        return pCoords
+    else
+        print("tu n és admin")
+    end
+end)
+
+local TSGetVehiclesInArea = function(coords, maxDistance, modelFilter)
+	return TSGetNearbyEntities(GetAllVehicles(), coords, modelFilter, maxDistance)
+end
+
+RegisterNetEvent("esx_adminmenu:server:DeleteVehicle", function(radi)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local allowed = CheckAllowed(xPlayer.source, "VehicleRelatedOptions_DeleteVehicle")
+    local radius = 1.0
+    if radi then
+        radius = tonumber(radi) + 0.0
+    end
+    local veh = GetVehiclePedIsIn(GetPlayerPed(xPlayer.source))
+    if allowed then
+        if veh ~= 0 then
+            DeleteEntity(veh)
+        else
+            veh = TSGetVehiclesInArea(GetEntityCoords(GetPlayerPed(xPlayer.source)), radius)
+            for i = 1, #veh do
+                DeleteEntity(veh[i].entity)
+            end
+        end
+    else
+        print("tu n és admin")
+    end
+end)
+
+local TSSpawnVehicle = function(model, coords, heading, cb)
+	if type(model) == "string" then
+        model = GetHashKey(model)
+    end
+	CreateThread(function()
+		local entity = Citizen.InvokeNative(`CREATE_AUTOMOBILE`, model, coords.x, coords.y, coords.z, heading)
+		while not DoesEntityExist(entity) do
+            Wait(50)
+        end
+		cb(entity)
+	end)
+end
+
+RegisterNetEvent("esx_adminmenu:server:SpawnVehicle", function(veh)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local playerPed = GetPlayerPed(source)
+    local model = veh
+    local vehicle = GetVehiclePedIsIn(playerPed)
+    local allowed = CheckAllowed(source, "VehicleRelatedOptions_SpawnCustomVehicle")
+    if allowed then
+        if vehicle then
+            DeleteEntity(vehicle)
+        end
+        Wait(100)
+        TSSpawnVehicle(model or `baller2`, GetEntityCoords(playerPed), GetEntityHeading(playerPed), function(car)
+            local timeout = 50
+            repeat
+                Wait(0)
+                timeout = timeout - 1
+                SetPedIntoVehicle(playerPed, car, -1)
+            until GetVehiclePedIsIn(playerPed, false) ~= 0 or timeout < 1
+        end)
+    else
+        print("tu n és admin")
+    end
 end)

@@ -21,3 +21,8 @@ OnlinePlyOptions_KillPlayer = {}
 OnlinePlyOptions_KickPlayer = {}
 OnlinePlyOptions_ScreenShopPlayer = {}
 OnlinePlyOptions_SpectatePlayer = {}
+
+VehicleRelatedOptions = {}
+VehicleRelatedOptions_DeleteVehicle = {}
+VehicleRelatedOptions_UnlockVehicle = {}
+VehicleRelatedOptions_SpawnCustomVehicle = {}

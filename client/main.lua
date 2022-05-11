@@ -7,7 +7,7 @@ RegisterCommand("tsadmin", function()
                 options = {
                     ["🧍‍♂️ Online Players"] = {event = "esx_adminmenu:OnlinePlayers", description = "Show Online Players"},
                     ["🧍‍♂️ Player Related Options"] = {description = "Show Player Related Options"},
-                    ["🚙 Vehicle Related Options"] = {description = "Show Vehicle Related Options"},
+                    ["🚙 Vehicle Related Options"] = {event = "esx_adminmenu:VehiclesRelatedOptionsMenu", description = "Show Vehicle Related Options"},
                     ["🚧 Misc Settings"] = {description = "Misc Settings"},
                     ["🚧 Troll Menu"] = {description = "Open Troll Menu"},
                     ["📸 Rockstar Editor"] = {description = "Rockstar Settings"}
@@ -39,33 +39,39 @@ RegisterNetEvent("esx_adminmenu:OnlinePlayers", function()
 end)
 
 RegisterNetEvent("esx_adminmenu:OpenPlayersMenu", function(data)
-    selectedPlayer = data.id
-    lib.registerContext({
-        id = "online_players_each",
-        title = "ID: "..selectedPlayer.."",
-        menu = "online_players",
-        options = {
-            ["💬 Send Private Message"] = {event = "esx_adminmenu:client:SendMessage", description = "Send private message to player"},
-            ["💬 Change Skin"] = {event = "esx_adminmenu:client:ChangeSkin", description = "Change skin option for player"},
-            ["📂 Show Inventory"] = {event = "esx_adminmenu:client:ShowInventory", description = "Show Player Inventory"},
-            ["📗 Set Job"] = {event = "esx_adminmenu:client:GetJobs", description = "Change Player Job"},
-            ["🎁 Give Player Item"] = {event = "esx_adminmenu:client:GiveItem", description = "Give Item"},
-            ["🗑 Remove Inventory Item"] = {event = "esx_adminmenu:client:GetItems", description = "Remove Item"},
-            ["💵 Give Account Money"] = {event = "esx_adminmenu:client:GiveAccountMoney", description = "Give Money"},
-            ["💵 Remove Account Money"] = {event = "esx_adminmenu:client:RemoveAccountMoney", description = "Remove Money"},
-            ["✨ Add / Remove License"] = {event = "esx_adminmenu:client:ToggleLicense", description = "Add / Remove License"},
-            ["✨ Heal Player"] = {event = "esx_adminmenu:client:HealPlayer", description = "Heal Player"},
-            ["❤️ Revive Player"] = {event = "esx_adminmenu:client:RevivePlayer", description = "Revive Player"},
-            ["🛸 Teleport To Player"] = {event = "esx_adminmenu:client:Goto", description = "Teleport To Player"},
-            ["🚀 Bring Player"] = {event = "esx_adminmenu:client:Bring", description = "Bring Player"},
-            ["💾 Print Identifiers"] = {event = "esx_adminmenu:client:PrintID", description = "Print player identifiers"},
-            ["🔪 Kill Player"] = {event = "esx_adminmenu:client:KillPlayer", description = "Kill Player"},
-            ["🦶🏽 Kick Player"] = {event = "esx_adminmenu:client:KickPlayer", description = "Kick Player"},
-            ["📷 Screenshot"] = {event = "esx_adminmenu:client:ScreenShopPlayer", description = "Take screenshot of player screen"},
-            ["🔬 Spectate Player"] = {event = "esx_adminmenu:client:SpectatePlayer", description = "Spectate Player"}
-        }
-    })
-    lib.showContext("online_players_each")
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            selectedPlayer = data.id
+            lib.registerContext({
+                id = "online_players_each",
+                title = "ID: "..selectedPlayer.."",
+                menu = "online_players",
+                options = {
+                    ["💬 Send Private Message"] = {event = "esx_adminmenu:client:SendMessage", description = "Send private message to player"},
+                    ["💬 Change Skin"] = {event = "esx_adminmenu:client:ChangeSkin", description = "Change skin option for player"},
+                    ["📂 Show Inventory"] = {event = "esx_adminmenu:client:ShowInventory", description = "Show Player Inventory"},
+                    ["📗 Set Job"] = {event = "esx_adminmenu:client:GetJobs", description = "Change Player Job"},
+                    ["🎁 Give Player Item"] = {event = "esx_adminmenu:client:GiveItem", description = "Give Item"},
+                    ["🗑 Remove Inventory Item"] = {event = "esx_adminmenu:client:GetItems", description = "Remove Item"},
+                    ["💵 Give Account Money"] = {event = "esx_adminmenu:client:GiveAccountMoney", description = "Give Money"},
+                    ["💵 Remove Account Money"] = {event = "esx_adminmenu:client:RemoveAccountMoney", description = "Remove Money"},
+                    ["✨ Add / Remove License"] = {event = "esx_adminmenu:client:ToggleLicense", description = "Add / Remove License"},
+                    ["✨ Heal Player"] = {event = "esx_adminmenu:client:HealPlayer", description = "Heal Player"},
+                    ["❤️ Revive Player"] = {event = "esx_adminmenu:client:RevivePlayer", description = "Revive Player"},
+                    ["🛸 Teleport To Player"] = {event = "esx_adminmenu:client:Goto", description = "Teleport To Player"},
+                    ["🚀 Bring Player"] = {event = "esx_adminmenu:client:Bring", description = "Bring Player"},
+                    ["💾 Print Identifiers"] = {event = "esx_adminmenu:client:PrintID", description = "Print player identifiers"},
+                    ["🔪 Kill Player"] = {event = "esx_adminmenu:client:KillPlayer", description = "Kill Player"},
+                    ["🦶🏽 Kick Player"] = {event = "esx_adminmenu:client:KickPlayer", description = "Kick Player"},
+                    ["📷 Screenshot"] = {event = "esx_adminmenu:client:ScreenShopPlayer", description = "Take screenshot of player screen"},
+                    ["🔬 Spectate Player"] = {event = "esx_adminmenu:client:SpectatePlayer", description = "Spectate Player"}
+                }
+            })
+            lib.showContext("online_players_each")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "OnlinePlyOptions")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:SendMessage", function(data)
@@ -82,7 +88,7 @@ RegisterNetEvent("esx_adminmenu:client:SendMessage", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_SendMessage", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_SendMessage")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:ChangeSkin", function(data)
@@ -92,7 +98,7 @@ RegisterNetEvent("esx_adminmenu:client:ChangeSkin", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_ChangeSkin", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_ChangeSkin")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:ShowInventory", function(data)
@@ -102,7 +108,7 @@ RegisterNetEvent("esx_adminmenu:client:ShowInventory", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_OpenInventory", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_OpenInventory")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:GetJobs", function(data)
@@ -128,7 +134,7 @@ RegisterNetEvent("esx_adminmenu:client:GetJobs", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_SetJob", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_SetJob")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:setgrade", function(data)
@@ -147,7 +153,7 @@ RegisterNetEvent("esx_adminmenu:client:setgrade", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_SetJob", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_SetJob")
 end)
 
 RegisterNetEvent("esx_adminmenu:GiveItem", function(data)
@@ -166,7 +172,7 @@ RegisterNetEvent("esx_adminmenu:GiveItem", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_GiveItem", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_GiveItem")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:GiveItem", function(data)
@@ -187,7 +193,7 @@ RegisterNetEvent("esx_adminmenu:client:GiveItem", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_GiveItem", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_GiveItem")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:GetItems", function(data)
@@ -197,7 +203,7 @@ RegisterNetEvent("esx_adminmenu:client:GetItems", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_RemoveInventoryItem", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_RemoveInventoryItem")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:RemoveItemCount", function(data)
@@ -216,7 +222,7 @@ RegisterNetEvent("esx_adminmenu:client:RemoveItemCount", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_RemoveInventoryItem", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_RemoveInventoryItem")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:RemoveItem", function(ply, list)
@@ -238,7 +244,7 @@ RegisterNetEvent("esx_adminmenu:client:RemoveItem", function(ply, list)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_RemoveInventoryItem", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_RemoveInventoryItem")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:GiveAccountMoney", function(data)
@@ -256,7 +262,7 @@ RegisterNetEvent("esx_adminmenu:client:GiveAccountMoney", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_GiveMoney", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_GiveMoney")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:RemoveAccountMoney", function(data)
@@ -274,7 +280,7 @@ RegisterNetEvent("esx_adminmenu:client:RemoveAccountMoney", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_RemoveMoney", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_RemoveMoney")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:ToggleLicense", function(data)
@@ -291,7 +297,7 @@ RegisterNetEvent("esx_adminmenu:client:ToggleLicense", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_License", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_License")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:HealPlayer", function(data)
@@ -301,7 +307,7 @@ RegisterNetEvent("esx_adminmenu:client:HealPlayer", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_Heal", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_Heal")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:RevivePlayer", function(data)
@@ -311,7 +317,7 @@ RegisterNetEvent("esx_adminmenu:client:RevivePlayer", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_Revive", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_Revive")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:Goto", function(data)
@@ -321,7 +327,7 @@ RegisterNetEvent("esx_adminmenu:client:Goto", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_Goto", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_Goto")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:Bring", function(data)
@@ -331,7 +337,7 @@ RegisterNetEvent("esx_adminmenu:client:Bring", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_Bring", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_Bring")
 end)
 
 RegisterNetEvent("esx_adminmenu:client:PrintID", function(data)
@@ -341,7 +347,7 @@ RegisterNetEvent("esx_adminmenu:client:PrintID", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_PRINTID", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_PRINTID")
 end)
 
 RegisterNetEvent("esx_adminmenu:PrintID", function(steamid, license, xbl, ip, discord, liveid)
@@ -355,40 +361,40 @@ RegisterNetEvent("esx_adminmenu:client:KillPlayer", function(data)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_KillPlayer", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_KillPlayer")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:Kill", function()
+RegisterNetEvent("esx_adminmenu:client:Kill", function(data)
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             SetEntityHealth(PlayerPedId(), 0)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_KillPlayer", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_KillPlayer")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:KickPlayer", function()
+RegisterNetEvent("esx_adminmenu:client:KickPlayer", function(data)
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             TriggerServerEvent("esx_adminmenu:server:KickPlayer", selectedPlayer)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_KickPlayer", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_KickPlayer")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:ScreenShopPlayer", function()
+RegisterNetEvent("esx_adminmenu:client:ScreenShopPlayer", function(data)
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             exports["screenshot-basic"]:requestScreenshotUpload("https://discord.com/api/webhooks/974002549835333702/qasfRoc_k4xPXHSJDOPZNl20FKbon_hRayZhyRD-CgGdzOAng-MXx631sKwFkQyiAB-f", "files[]", function(data) end)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_ScreenShopPlayer", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_ScreenShopPlayer")
 end)
 
-RegisterNetEvent("esx_adminmenu:client:SpectatePlayer", function()
+RegisterNetEvent("esx_adminmenu:client:SpectatePlayer", function(data)
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             lib.callback("esx_adminmenu:server:GetSpectateData", false, function(data)
@@ -465,5 +471,71 @@ RegisterNetEvent("esx_adminmenu:client:SpectatePlayer", function()
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
-    end, "OnlinePlyOptions_SpectatePlayer", "OnlinePlyOptions")
+    end, "OnlinePlyOptions_SpectatePlayer")
+end)
+
+RegisterNetEvent("esx_adminmenu:VehiclesRelatedOptionsMenu", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.registerContext({
+                id = "vehicle_related_options",
+                title = "🚙 Vehicle Related Options",
+                menu = "admin_menu",
+                options = {
+                    ["🚙 Delete Vehicle Radius"] = {event = "esx_adminmenu:client:DeleteVehicle", description = "Delete vehicles in radius"},
+                    ["🚙 Unlock Vehicle"] = {event = "esx_adminmenu:client:UnlockVehicle", description = "Unlock Closest Vehicle"},
+                    ["🚙 Spawn Custom Vehicle"] = {event = "esx_adminmenu:client:SpawnCustomVehicle", description = "Spawn Custom Veh"}
+                }
+            })
+            lib.showContext("vehicle_related_options")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:DeleteVehicle", function(data)
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local input = lib.inputDialog("TS Admin Menu", {"Radius"})
+            if input then
+                local radius = input[1]
+                if radius == nil then
+                    return
+                end
+                TriggerServerEvent("esx_adminmenu:server:DeleteVehicle", radius)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_DeleteVehicle")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:UnlockVehicle", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local vehicle = ESX.Game.GetClosestVehicle()
+            SetVehicleDoorsLocked(vehicle, 1)
+            SetVehicleDoorsLockedForAllPlayers(vehicle, false)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_UnlockVehicle")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:SpawnCustomVehicle", function(data)
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local input = lib.inputDialog("TS Admin Menu", {"Vehicle Code"})
+            if input then
+                local vehiclename = input[1]
+                if vehiclename == nil then
+                    return TriggerServerEvent("esx_adminmenu:server:SpawnVehicle", "baller2")
+                end
+                TriggerServerEvent("esx_adminmenu:server:SpawnVehicle", vehiclename)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_SpawnCustomVehicle")
 end)
