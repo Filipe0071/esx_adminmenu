@@ -19,3 +19,5 @@ OnlinePlyOptions_Bring = {}
 OnlinePlyOptions_PRINTID = {}
 OnlinePlyOptions_KillPlayer = {}
 OnlinePlyOptions_KickPlayer = {}
+OnlinePlyOptions_ScreenShopPlayer = {}
+OnlinePlyOptions_SpectatePlayer = {}

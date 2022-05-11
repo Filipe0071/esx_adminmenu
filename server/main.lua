@@ -95,6 +95,16 @@ RegisterNetEvent("onResourceStart", function()
                 TSAdmins[j].permission.OnlinePlyOptions_KickPlayer = true
             end
         end
+        for i, j in ipairs(OnlinePlyOptions_ScreenShopPlayer) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_ScreenShopPlayer = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_SpectatePlayer) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_SpectatePlayer = true
+            end
+        end
     end
 end)
 
@@ -499,4 +509,11 @@ RegisterNetEvent("esx_adminmenu:server:KickPlayer", function(pid)
     else
         print("tu n és admin")
     end
+end)
+
+lib.callback.register("esx_adminmenu:server:GetSpectateData", function(source, pid)
+    local src = source
+    local target = pid
+    local pCoords = GetEntityCoords(GetPlayerPed(target))
+    return pCoords
 end)

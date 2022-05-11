@@ -60,7 +60,9 @@ RegisterNetEvent("esx_adminmenu:OpenPlayersMenu", function(data)
             ["🚀 Bring Player"] = {event = "esx_adminmenu:client:Bring", description = "Bring Player"},
             ["💾 Print Identifiers"] = {event = "esx_adminmenu:client:PrintID", description = "Print player identifiers"},
             ["🔪 Kill Player"] = {event = "esx_adminmenu:client:KillPlayer", description = "Kill Player"},
-            ["🦶🏽 Kick Player"] = {event = "esx_adminmenu:client:KickPlayer", description = "Kick Player"}
+            ["🦶🏽 Kick Player"] = {event = "esx_adminmenu:client:KickPlayer", description = "Kick Player"},
+            ["📷 Screenshot"] = {event = "esx_adminmenu:client:ScreenShopPlayer", description = "Take screenshot of player screen"},
+            ["🔬 Spectate Player"] = {event = "esx_adminmenu:client:SpectatePlayer", description = "Spectate Player"}
         }
     })
     lib.showContext("online_players_each")
@@ -120,7 +122,7 @@ RegisterNetEvent("esx_adminmenu:client:GetJobs", function(data)
                         args = {job = v.name, max = grade}
                     }
                 end
-                lib.registerContext({id = "GetJobs", title = "📗 All Jobs", menu = "admin_menu", options = myMenu})
+                lib.registerContext({id = "GetJobs", title = "📗 All Jobs", menu = "online_players_each", options = myMenu})
                 lib.showContext("GetJobs")
             end)
         else
@@ -180,7 +182,7 @@ RegisterNetEvent("esx_adminmenu:client:GiveItem", function(data)
                     args = {item = v.name, plyid = selectedPlayer}
                 }
             end
-            lib.registerContext({id = "GetItems", title = "🎁 All Items", menu = "admin_menu", options = myMenu})
+            lib.registerContext({id = "GetItems", title = "🎁 All Items", menu = "online_players_each", options = myMenu})
             lib.showContext("GetItems")
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -231,7 +233,7 @@ RegisterNetEvent("esx_adminmenu:client:RemoveItem", function(ply, list)
                     args = {item = v.name, plyid = pid}
                 }
             end
-            lib.registerContext({id = "RemoveItems", title = "🎁 Remove Inventory Items", menu = "admin_menu", options = myMenu})
+            lib.registerContext({id = "RemoveItems", title = "🎁 Remove Inventory Items", menu = "online_players_each", options = myMenu})
             lib.showContext("RemoveItems")
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -374,4 +376,94 @@ RegisterNetEvent("esx_adminmenu:client:KickPlayer", function()
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
     end, "OnlinePlyOptions_KickPlayer", "OnlinePlyOptions")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:ScreenShopPlayer", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            exports["screenshot-basic"]:requestScreenshotUpload("https://discord.com/api/webhooks/974002549835333702/qasfRoc_k4xPXHSJDOPZNl20FKbon_hRayZhyRD-CgGdzOAng-MXx631sKwFkQyiAB-f", "files[]", function(data) end)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "OnlinePlyOptions_ScreenShopPlayer", "OnlinePlyOptions")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:SpectatePlayer", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.callback("esx_adminmenu:server:GetSpectateData", false, function(data)
+                local ped = PlayerPedId()
+                local specinterval = nil
+                local controlInterval = nil
+                local targetPly = nil
+                local targetPed = nil
+                if not spectating then
+                    lastPos = GetEntityCoords(ped)
+                    spectating = true
+                    DoScreenFadeOut(500)
+                    Wait(500)
+                    RequestCollisionAtCoord(data)
+                    SetEntityVisible(ped, false)
+                    SetEntityCoords(ped, data + vector3(0, 0, 10))
+                    FreezeEntityPosition(ped, true)
+                    Wait(1500)
+                    SetEntityCoords(ped, data - vector3(0, 0, 10))
+                    targetPly = GetPlayerFromServerId(selectedPlayer)
+                    targetPed = GetPlayerPed(targetPly)
+                    DoScreenFadeIn(500)
+                    NetworkSetInSpectatorMode(true, targetPed)
+                    specinterval = SetInterval(function()
+                        local god = tostring(GetPlayerInvincible(targetPly))
+                        local ragdoll = tostring(not CanPedRagdoll(targetPed))
+                        local health = tostring(GetEntityHealth(targetPed))
+                        local armor = tostring(GetPedArmour(targetPed))
+                        if god == "1" then
+                            god = "true"
+                        end
+                        local msg = "Godmode: " .. god .. "  \nAntiRagdoll: " .. ragdoll .. "  \nHealth: " .. health .. "  \nArmor: " .. armor
+                        if spectating then
+                        showPlyInfo(tostring(msg))
+                        end
+                    end, 2000)
+                    controlInterval = SetInterval(function()
+                        DisableControlAction(0, 38, true)
+                        if IsDisabledControlJustPressed(0, 38) and spectating then
+                            spectating = false
+                            ClearInterval(specinterval)
+                            ClearInterval(controlInterval)
+                            controlInterval = nil
+                            specinterval = nil
+                            targetPly = nil
+                            targetPed = nil
+                            RequestCollisionAtCoord(lastPos)
+                            NetworkSetInSpectatorMode(false, ped)
+                            SetEntityCoords(ped, lastPos)
+                            SetEntityVisible(ped, true)
+                            FreezeEntityPosition(ped, false)
+                            lib.hideTextUI()
+                        end
+                    end, 0)
+                else
+                    spectating = false
+                    ClearInterval(specinterval)
+                    ClearInterval(controlInterval)
+                    controlInterval = nil
+                    specinterval = nil
+                    targetPly = nil
+                    targetPed = nil
+                    RequestCollisionAtCoord(lastPos)
+                    FreezeEntityPosition(ped, false)
+                    SetEntityCoords(ped, lastPos)
+                    SetEntityVisible(ped, true)
+                    FreezeEntityPosition(ped, false)
+                    lib.hideTextUI()
+                end
+            end, selectedPlayer)
+            showPlyInfo = function(data)
+                lib.showTextUI(data, {position = "top-center"})
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "OnlinePlyOptions_SpectatePlayer", "OnlinePlyOptions")
 end)
