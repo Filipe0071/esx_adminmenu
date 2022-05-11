@@ -88,7 +88,7 @@ CheckAllowed = function(source, type, type2)
     return allowed
 end
 
-ESX.RegisterServerCallback("esx_adm:server:IsAllowed", function(source, cb, action, action2)
+ESX.RegisterServerCallback("esx_adminmenu:server:IsAllowed", function(source, cb, action, action2)
     local src = source
     local xPlayer = ESX.GetPlayerFromId(src)
     local allowed = false
