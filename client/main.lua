@@ -6,7 +6,7 @@ RegisterCommand("tsadmin", function()
                 title = "🧍‍♂️ Admin Menu",
                 options = {
                     ["🧍‍♂️ Online Players"] = {event = "esx_adminmenu:OnlinePlayers", description = "Show Online Players"},
-                    ["🧍‍♂️ Player Related Options"] = {description = "Show Player Related Options"},
+                    ["🧍‍♂️ Player Related Options"] = {event = "esx_adminmenu:PlayerRelatedOptionsMenu", description = "Show Player Related Options"},
                     ["🚙 Vehicle Related Options"] = {event = "esx_adminmenu:VehiclesRelatedOptionsMenu", description = "Show Vehicle Related Options"},
                     ["🚧 Misc Settings"] = {description = "Misc Settings"},
                     ["🚧 Troll Menu"] = {description = "Open Troll Menu"},
@@ -484,7 +484,8 @@ RegisterNetEvent("esx_adminmenu:VehiclesRelatedOptionsMenu", function()
                 options = {
                     ["🚙 Delete Vehicle Radius"] = {event = "esx_adminmenu:client:DeleteVehicle", description = "Delete vehicles in radius"},
                     ["🚙 Unlock Vehicle"] = {event = "esx_adminmenu:client:UnlockVehicle", description = "Unlock Closest Vehicle"},
-                    ["🚙 Spawn Custom Vehicle"] = {event = "esx_adminmenu:client:SpawnCustomVehicle", description = "Spawn Custom Veh"}
+                    ["🚙 Spawn Custom Vehicle"] = {event = "esx_adminmenu:client:SpawnCustomVehicle", description = "Spawn Custom Veh"},
+                    ["🚙 Vehicle Options"] = {event = "esx_adminmenu:client:VehicleOptions", description = "Vehicle Options"}
                 }
             })
             lib.showContext("vehicle_related_options")
@@ -538,4 +539,235 @@ RegisterNetEvent("esx_adminmenu:client:SpawnCustomVehicle", function(data)
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
     end, "VehicleRelatedOptions_SpawnCustomVehicle")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:VehicleOptions", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.registerContext({
+                id = "vehicle_options",
+                title = "🚙 Vehicle Options",
+                menu = "vehicle_related_options",
+                options = {
+                    ["🧊 Freeze Vehicle"] = {event = "esx_adminmenu:toggle_FreezeVehicle", description = "Freeze Vehicle"},
+                    ["🚧 Toggle Engine"] = {event = "esx_adminmenu:toggle_Engine", description = "Toggle Engine"},
+                    ["⌨️ Change Numberplate"] = {event = "esx_adminmenu:ChangeNumberPlate", description = "Change Number Plate Text"},
+                    ["🚗 Flip Vehicle"] = {event = "esx_adminmenu:FlipVehicle", description = "Set Vehicle Properly"},
+                    ["🚗 Delete Vehicle"] = {event = "esx_adminmenu:DeleteVehiclePlayer", description = "Delete Vehicle you are in"},
+                    ["💪 Vehicle Godmode"] = {event = "esx_adminmenu:VehicleGodMode", description = "Vehicle Godmode"},
+                    ["🛠 Repair Vehicle"] = {event = "esx_adminmenu:RepairVehicle", description = "Repair Vehicle"},
+                    ["🚿 Wash Vehicle"] = {event = "esx_adminmenu:WashVehicle", description = "Wash Vehicle"},
+                    ["🚿 Keep Vehicle Clean"] = {event = "esx_adminmenu:KeepVehicleClean", description = "Keep Vehicle Clean"}
+                }
+            })
+            lib.showContext("vehicle_options")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_VehicleOptions")
+end)
+
+local FreezeVehicle = false
+
+RegisterNetEvent("esx_adminmenu:toggle_FreezeVehicle", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if FreezeVehicle then
+                FreezeVehicle = false
+                local ped = PlayerPedId()
+                local veh = GetVehiclePedIsIn(ped, false)
+                FreezeEntityPosition(veh, false)
+            else
+                FreezeVehicle = true
+                local ped = PlayerPedId()
+                local veh = GetVehiclePedIsIn(ped, false)
+                FreezeEntityPosition(veh, true)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_FreezeVehicle")
+end)
+
+local Engine = false
+
+RegisterNetEvent("esx_adminmenu:toggle_Engine", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if Engine then
+                Engine = false
+                local ped = PlayerPedId()
+                local veh = GetVehiclePedIsIn(ped, false)
+                SetVehicleEngineOn(veh, false, true, true)
+            else
+                Engine = true
+                local ped = PlayerPedId()
+                local veh = GetVehiclePedIsIn(ped, false)
+                SetVehicleEngineOn(veh, true, true, true)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_Engine")
+end)
+
+RegisterNetEvent("esx_adminmenu:ChangeNumberPlate", function(data)
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local input = lib.inputDialog("TS Admin Menu", {"Number Plate Text"})
+            if input then
+                local platenumber = input[1]
+                if platenumber == nil then
+                    return 
+                end
+                local ped = PlayerPedId()
+                local veh = GetVehiclePedIsIn(ped, false)
+                if veh ~= 0 then
+                    SetVehicleNumberPlateText(veh, platenumber)
+                end
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_ChangeNumberPlate")
+end)
+
+RegisterNetEvent("esx_adminmenu:FlipVehicle", function(data)
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local ped = PlayerPedId()
+            local veh = GetVehiclePedIsIn(ped, false)
+            SetVehicleOnGroundProperly(veh)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_FlipVehicle")
+end)
+
+RegisterNetEvent("esx_adminmenu:DeleteVehiclePlayer", function(data)
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            TriggerServerEvent("esx_adminmenu:server:DeleteVehicle")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_DeleteVehiclePlayer")
+end)
+
+local VehicleGodMode = false
+local vehgod = nil
+
+RegisterNetEvent("esx_adminmenu:VehicleGodMode", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if VehicleGodMode then
+                VehicleGodMode = false
+                local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+                SetEntityInvincible(veh, false)
+                SetVehicleEngineCanDegrade(veh, true)
+                SetVehicleCanBeVisiblyDamaged(veh, true)
+                SetVehicleWheelsCanBreak(veh, true)
+                SetVehicleHasStrongAxles(veh, false)
+                SetVehicleTyresCanBurst(veh, true)
+                SetDisableVehicleEngineFires(veh, false)
+                ClearInterval(vehgod)
+            else
+                VehicleGodMode = true
+                local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+                SetEntityInvincible(veh, true)
+                SetVehicleEngineCanDegrade(veh, false)
+                SetVehicleCanBeVisiblyDamaged(veh, false)
+                SetVehicleWheelsCanBreak(veh, false)
+                SetVehicleHasStrongAxles(veh, true)
+                SetVehicleTyresCanBurst(veh, false)
+                SetDisableVehicleEngineFires(veh, true)
+                vehgod = SetInterval(function()
+                    if IsVehicleDamaged(veh) then
+                        RemoveDecalsFromVehicle(veh)
+                        SetVehicleFixed(veh)
+                        SetVehicleDeformationFixed(veh)
+                    end
+                    if IsVehicleEngineOnFire(veh) then
+                        SetDisableVehicleEngineFires(veh, true)
+                    end
+                    if ESX.Math.Round(GetVehicleEngineHealth(veh), 1) < 1000 then
+                        SetVehicleFixed(veh)
+                        SetVehicleEngineHealth(veh, 4000)
+                    end
+                end, 0)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_VehicleGodMode")
+end)
+
+RegisterNetEvent("esx_adminmenu:RepairVehicle", function(data)
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+            if veh ~= 0 then
+                SetVehicleFixed(veh)
+                SetVehicleDeformationFixed(veh)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_RepairVehicle")
+end)
+
+RegisterNetEvent("esx_adminmenu:WashVehicle", function(data)
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+            if veh ~= 0 then
+                SetVehicleDirtLevel(veh, 0.0)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_WashVehicle")
+end)
+
+local KeepVehicleClean = false
+local keepclean = nil
+
+RegisterNetEvent("esx_adminmenu:KeepVehicleClean", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if KeepVehicleClean then
+                KeepVehicleClean = false
+                ClearInterval(keepclean)
+            else
+                KeepVehicleClean = true
+                local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+                keepclean = SetInterval(function()
+                    if GetVehicleDirtLevel(veh) > 0.0 then
+                        SetVehicleDirtLevel(veh, 0.0)
+                    end
+                end, 0)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "VehicleRelatedOptions_KeepVehicleClean")
+end)
+
+RegisterNetEvent("esx_adminmenu:PlayerRelatedOptionsMenu", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.registerContext({
+                id = "player_related_options",
+                title = "🧍‍♂️ Player Related Options",
+                menu = "admin_menu",
+                options = {
+                    ["🧍‍♂️ Player Options"] = {event = "", description = "Player Options"},
+                    ["🧍‍♂️ Ped Options"] = {event = "", description = "Ped Options"}
+                }
+            })
+            lib.showContext("player_related_options")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions")
 end)

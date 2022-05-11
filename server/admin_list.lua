@@ -26,3 +26,15 @@ VehicleRelatedOptions = {}
 VehicleRelatedOptions_DeleteVehicle = {}
 VehicleRelatedOptions_UnlockVehicle = {}
 VehicleRelatedOptions_SpawnCustomVehicle = {}
+VehicleRelatedOptions_VehicleOptions = {}
+VehicleRelatedOptions_FreezeVehicle = {}
+VehicleRelatedOptions_Engine = {}
+VehicleRelatedOptions_ChangeNumberPlate = {}
+VehicleRelatedOptions_FlipVehicle = {}
+VehicleRelatedOptions_DeleteVehiclePlayer = {}
+VehicleRelatedOptions_VehicleGodMode = {}
+VehicleRelatedOptions_RepairVehicle = {}
+VehicleRelatedOptions_WashVehicle = {}
+VehicleRelatedOptions_KeepVehicleClean = {}
+
+PlayerRelatedOptions = {}

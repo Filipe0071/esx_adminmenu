@@ -125,6 +125,61 @@ RegisterNetEvent("onResourceStart", function()
                 TSAdmins[j].permission.VehicleRelatedOptions_SpawnCustomVehicle = true
             end
         end
+        for i, j in ipairs(VehicleRelatedOptions_VehicleOptions) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_VehicleOptions = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_FreezeVehicle) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_FreezeVehicle = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_Engine) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_Engine = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_ChangeNumberPlate) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_ChangeNumberPlate = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_FlipVehicle) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_FlipVehicle = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_DeleteVehiclePlayer) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_DeleteVehiclePlayer = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_VehicleGodMode) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_VehicleGodMode = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_RepairVehicle) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_RepairVehicle = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_WashVehicle) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_WashVehicle = true
+            end
+        end
+        for i, j in ipairs(VehicleRelatedOptions_KeepVehicleClean) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.VehicleRelatedOptions_KeepVehicleClean = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions = true
+            end
+        end
     end
 end)
 
