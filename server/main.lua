@@ -50,6 +50,51 @@ RegisterNetEvent("onResourceStart", function()
                 TSAdmins[j].permission.OnlinePlyOptions_GiveMoney = true
             end
         end
+        for i, j in ipairs(OnlinePlyOptions_RemoveMoney) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_RemoveMoney = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_License) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_License = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_Heal) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_Heal = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_Revive) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_Revive = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_Goto) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_Goto = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_Bring) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_Bring = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_PRINTID) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_PRINTID = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_KillPlayer) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_KillPlayer = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_KickPlayer) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_KickPlayer = true
+            end
+        end
     end
 end)
 
@@ -307,6 +352,150 @@ RegisterNetEvent("esx_adminmenu:server:GiveAccMoney", function(pid, acc, amount)
         if account == "money" or account == "bank" or account == "black_money" then
             yPlayer.addAccountMoney(account, money)
         end
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:RemoveAccMoney", function(pid, acc, amount)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_RemoveMoney", "OnlinePlyOptions")
+    local account = acc
+    local money = tonumber(amount)
+    if allowed then
+        if account == "money" or account == "bank" or account == "black_money" then
+            yPlayer.removeAccountMoney(account, money)
+        end
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:ToggleLicense", function(playerId, license)
+    local playerId = playerId
+    local license = license
+    local source = source
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(playerId)
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_License", "OnlinePlyOptions")
+    if allowed then
+        local found = false
+        TriggerEvent("esx_license:getLicensesList", function(licenses)
+            for i, l in pairs(licenses) do
+                if l.type == license then
+                    found = true
+                    TriggerEvent("esx_license:checkLicense", playerId, license, function(hasLicense)
+                        if hasLicense then
+                            TriggerEvent("esx_license:removeLicense", playerId, license)
+                            print(yPlayer.getName(playerId) .. " " .. license .. " has been removed ")
+                        else
+                            TriggerEvent("esx_license:addLicense", playerId, license)
+                            print(yPlayer.getName(playerId) .. " has been added the license " .. license)
+                        end
+                    end)
+                end
+            end
+        end)
+        Wait(3000)
+        if not found then
+            print("This License does not exist.")
+        end
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:HealPlayer", function(pid)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Heal", "OnlinePlyOptions")
+    if allowed then
+        yPlayer.triggerEvent("esx_basicneeds:healPlayer")
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:RevivePlayer", function(pid)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Revive", "OnlinePlyOptions")
+    if allowed then
+        yPlayer.triggerEvent("esx_ambulancejob:revive")
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:Goto", function(pid)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Goto", "OnlinePlyOptions")
+    local yPlyCoords = yPlayer.getCoords()
+    if allowed then
+        xPlayer.setCoords(yPlyCoords)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:Bring", function(pid)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    local xPlyCoords = xPlayer.getCoords()
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_Bring", "OnlinePlyOptions")
+    if allowed then
+        yPlayer.setCoords(xPlyCoords)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:PrintID", function(pid)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_PRINTID", "OnlinePlyOptions")
+    local steamid, license, xbl, ip, discord, liveid = nil, nil, nil, nil, nil, nil
+    if allowed then
+        for k, v in pairs(GetPlayerIdentifiers(yPlayer.source)) do
+            if string.sub(v, 1, string.len("steam:")) == "steam:" then
+                steamid = v
+            elseif string.sub(v, 1, string.len("license:")) == "license:" then
+                license = v
+            elseif string.sub(v, 1, string.len("xbl:")) == "xbl:" then
+                xbl = v
+            elseif string.sub(v, 1, string.len("ip:")) == "ip:" then
+                ip = v
+            elseif string.sub(v, 1, string.len("discord:")) == "discord:" then
+                discord = v
+            elseif string.sub(v, 1, string.len("live:")) == "live:" then
+                liveid = v
+            end
+        end
+        TriggerClientEvent("esx_adminmenu:PrintID", xPlayer.source, steamid, license, xbl, ip, discord, liveid)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:KillPlayer", function(pid)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_KillPlayer", "OnlinePlyOptions")
+    if allowed then
+        TriggerClientEvent("esx_adminmenu:client:Kill", yPlayer.source)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:KickPlayer", function(pid)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_KickPlayer", "OnlinePlyOptions")
+    if allowed then
+        yPlayer.kick("You Have been kicked from the server by: " .. xPlayer.getName())
     else
         print("tu n és admin")
     end
