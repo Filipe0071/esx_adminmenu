@@ -761,8 +761,8 @@ RegisterNetEvent("esx_adminmenu:PlayerRelatedOptionsMenu", function()
                 title = "🧍‍♂️ Player Related Options",
                 menu = "admin_menu",
                 options = {
-                    ["🧍‍♂️ Player Options"] = {event = "", description = "Player Options"},
-                    ["🧍‍♂️ Ped Options"] = {event = "", description = "Ped Options"}
+                    ["🧍‍♂️ Player Options"] = {event = "esx_adminmenu:client:PlayerOptions", description = "Player Options"},
+                    ["🧍‍♂️ Ped Options"] = {event = "esx_adminmenu:client:PedOptions", description = "Ped Options"}
                 }
             })
             lib.showContext("player_related_options")
@@ -770,4 +770,338 @@ RegisterNetEvent("esx_adminmenu:PlayerRelatedOptionsMenu", function()
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
     end, "PlayerRelatedOptions")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:PlayerOptions", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.registerContext({
+                id = "player_options",
+                title = "🧍‍♂️ Player Options",
+                menu = "player_related_options",
+                options = {
+                    ["💪 Godmode"] = {event = "esx_adminmenu:toggle_GodMode", description = "Godmode"},
+                    ["👀 Invisible"] = {event = "esx_adminmenu:toggle_Invisible", description = "Invisible"},
+                    ["🏃🏻‍♀️ Unlimited Stamina"] = {event = "esx_adminmenu:toggle_Stamina", description = "Unlimited Stamina"},
+                    ["🏊🏻‍♂️ Fast Swim"] = {event = "esx_adminmenu:toggle_FastSwim", description = "Fast Swim"},
+                    ["🏃‍♀️ Super Jump"] = {event = "esx_adminmenu:toggle_SuperJump", description = "Super Jump"},
+                    ["🏃‍♀️ No Ragdoll"] = {event = "esx_adminmenu:toggle_NoRagDoll", description = "No Ragdoll"},
+                    ["💙 Set Armor"] = {event = "esx_adminmenu:SetArmor", description = "Set Armor"},
+                    ["🚿 Clean Player Clothes"] = {event = "esx_adminmenu:CleanPlayerClothes", description = "Clean Player Clothes"},
+                    ["🧺 Wet Player Clothes"] = {event = "esx_adminmenu:WetPlayerClothes", description = "Wet Player Clothes"},
+                    ["🔅 Dry Player Clothes"] = {event = "esx_adminmenu:DryPlayerClothes", description = "Dry Player Clothes"},
+                    ["💀 Commit Suicide"] = {event = "esx_adminmenu:CommitSuicide", description = "Commit Suicide"},
+                    ["🧊 Freeze Player"] = {event = "esx_adminmenu:FeezePlayer", description = "Freeze Player"},
+                    ["🪂 Toggle Noclip"] = {event = "esx_adminmenu:toggle_noclip", description = "Toggle Noclip"}
+                }
+            })
+            lib.showContext("player_options")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_PlayerOptions")
+end)
+
+local GodMode = false
+local god = nil
+
+RegisterNetEvent("esx_adminmenu:toggle_GodMode", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if GodMode then
+                GodMode = false
+                SetPedCanRagdoll(PlayerPedId(), true)
+                SetPedDiesWhenInjured(PlayerPedId(), true)
+                SetPedDiesInstantlyInWater(PlayerPedId(), true)
+                SetPedDiesInVehicle(PlayerPedId(), true)
+                SetPedDiesInSinkingVehicle(PlayerPedId(), true)
+                ClearInterval(god)
+            else
+                GodMode = true
+                local ped = PlayerPedId()
+                local maxh = GetEntityMaxHealth(ped)
+                SetPedCanRagdoll(ped, false)
+                SetPedDiesWhenInjured(ped, false)
+                SetPedDiesInstantlyInWater(ped, false)
+                SetPedDiesInVehicle(ped, false)
+                SetPedDiesInSinkingVehicle(ped, false)
+                god = SetInterval(function()
+                    if CanPedRagdoll(PlayerPedId()) then
+                        SetPedCanRagdoll(PlayerPedId(), false)
+                    end
+                    if GetEntityHealth(ped) < maxh then
+                        SetEntityHealth(PlayerPedId(), maxh)
+                    end
+                end, 0)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_GodMode")
+end)
+
+local Invisible = false
+
+RegisterNetEvent("esx_adminmenu:toggle_Invisible", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if Invisible then
+                Invisible = false
+                SetEntityVisible(PlayerPedId(), true, 0)
+                SetPedAudioFootstepLoud(PlayerPedId(), true)
+                SetPedAudioFootstepQuiet(PlayerPedId(), true)
+            else
+                Invisible = true
+                SetEntityVisible(PlayerPedId(), false, 0)
+                SetPedAudioFootstepLoud(PlayerPedId(), false)
+                SetPedAudioFootstepQuiet(PlayerPedId(), false)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_Invisible")
+end)
+
+local Stamina = false
+local stam = nil
+
+RegisterNetEvent("esx_adminmenu:toggle_Stamina", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if Stamina then
+                Stamina = false
+                ClearInterval(stam)
+            else
+                Stamina = true
+                stam = SetInterval(function()
+                    RestorePlayerStamina(PlayerId(), 1.0)
+                end, 100)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_Stamina")
+end)
+
+local FastSwim = false
+
+RegisterNetEvent("esx_adminmenu:toggle_FastSwim", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if FastSwim then
+                FastSwim = false
+                SetSwimMultiplierForPlayer(PlayerId(), 1.0)
+            else
+                FastSwim = true
+                SetSwimMultiplierForPlayer(PlayerId(), 1.49)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_FastSwim")
+end)
+
+local SuperJumpp = false
+local superjump = nil
+
+RegisterNetEvent("esx_adminmenu:toggle_SuperJump", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if SuperJumpp then
+                SuperJumpp = false
+                ClearInterval(superjump)
+            else
+                SuperJumpp = true
+                superjump = SetInterval(function()
+                    SetSuperJumpThisFrame(PlayerId())
+                end, 0)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_SuperJump")
+end)
+
+local NoRagDoll = false
+local ragdoll = nil
+
+RegisterNetEvent("esx_adminmenu:toggle_NoRagDoll", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if NoRagDoll then
+                NoRagDoll = false
+                SetPedCanRagdollFromPlayerImpact(PlayerPedId(), true)
+                SetPedCanRagdoll(PlayerPedId(), true)
+                ClearInterval(ragdoll)
+            else
+                NoRagDoll = true
+                ragdoll = SetInterval(function()
+                    SetPedCanRagdoll(PlayerPedId(), false)
+                    SetPedCanRagdollFromPlayerImpact(PlayerPedId(), false)
+                end, 0)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_NoRagDoll")
+end)
+
+RegisterNetEvent("esx_adminmenu:SetArmor", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local input = lib.inputDialog("Set Armor", {
+                {
+                    type = "select",
+                    label = "Select Armor",
+                    options = {
+                        {value = "20% Armor", label = "Super Light Armor"},
+                        {value = "40% Armor", label = "Light Armor"},
+                        {value = "60% Armor", label = "Standard Armor"},
+                        {value = "80% Armor", label = "Heavy Armor"},
+                        {value = "100% Armor", label = "Super Heavy Armor"}
+                    }
+                }
+            })
+            if input[1] == "20% Armor" then
+                SetPedArmour(PlayerPedId(), 20)
+            elseif input[1] == "40% Armor" then
+                SetPedArmour(PlayerPedId(), 40)
+            elseif input[1] == "60% Armor" then
+                SetPedArmour(PlayerPedId(), 60)
+            elseif input[1] == "80% Armor" then
+                SetPedArmour(PlayerPedId(), 80)
+            elseif input[1] == "100% Armor" then
+                SetPedArmour(PlayerPedId(), 100)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_SetArmor")
+end)
+
+RegisterNetEvent("esx_adminmenu:CleanPlayerClothes", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            ClearPedBloodDamage(PlayerPedId())
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_CleanPlayerClothes")
+end)
+
+RegisterNetEvent("esx_adminmenu:WetPlayerClothes", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            SetPedWetnessHeight(PlayerPedId(), 2.0)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_WetPlayerClothes")
+end)
+
+RegisterNetEvent("esx_adminmenu:DryPlayerClothes", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            ClearPedWetness(PlayerPedId())
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_DryPlayerClothes")
+end)
+
+RegisterNetEvent("esx_adminmenu:CommitSuicide", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            SetEntityHealth(PlayerPedId(), 0.0)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_CommitSuicide")
+end)
+
+local FeezePlayer = false
+
+RegisterNetEvent("esx_adminmenu:FeezePlayer", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if FeezePlayer then
+                FeezePlayer = false
+                FreezeEntityPosition(PlayerPedId(), false)
+            else
+                FeezePlayer = true
+                FreezeEntityPosition(PlayerPedId(), true)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_FeezePlayer")
+end)
+
+local Noclip = false
+
+RegisterNetEvent("esx_adminmenu:toggle_noclip", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            if Noclip then
+                Noclip = false
+                SetNoClip(false)
+            else
+                Noclip = true
+                SetNoClip(true)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_Noclip")
+end)
+
+local SetPlayerSkin = function(ped)
+    local modelHash = GetHashKey(ped)
+    if IsModelInCdimage(modelHash) and IsModelValid(modelHash) then
+        RequestModel(modelHash)
+        while not HasModelLoaded(modelHash) do
+            Citizen.Wait(0)
+        end
+        if GetEntityModel(PlayerPedId()) ~= modelHash then
+            SetPlayerModel(PlayerId(), modelHash)
+            SetModelAsNoLongerNeeded(modelHash)
+            SetPedDefaultComponentVariation(PlayerPedId())
+            ClearAllPedProps(PlayerPedId())
+            ClearPedDecorations(PlayerPedId())
+            ClearPedFacialDecorations(PlayerPedId())
+        end
+    end
+end
+
+RegisterNetEvent("esx_adminmenu:client:PedOptions", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.registerContext({
+                id = "ped_options",
+                title = "🧍‍♂️ Ped Options",
+                menu = "player_related_options",
+                options = {
+                    ["👕 Change Appearance"] = {event = "esx_mroupa:openSaveableMenu", description = "Change Ped Appearance"},
+                    ["👦🏻 Change To Addon Ped"] = {event = "esx_adminmenu:client:ChangePed", description = "Change Ped Model"}
+                }
+            })
+            lib.showContext("ped_options")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:ChangePed", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local input = lib.inputDialog("TS Admin Menu", {"Model Name"})
+            if input then
+                local ped = input[1]
+                SetPlayerSkin(ped)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "PlayerRelatedOptions_ChangePed")
 end)

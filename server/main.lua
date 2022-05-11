@@ -180,6 +180,81 @@ RegisterNetEvent("onResourceStart", function()
                 TSAdmins[j].permission.PlayerRelatedOptions = true
             end
         end
+        for i, j in ipairs(PlayerRelatedOptions_PlayerOptions) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_PlayerOptions = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_GodMode) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_GodMode = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_Invisible) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_Invisible = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_Stamina) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_Stamina = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_FastSwim) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_FastSwim = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_SuperJump) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_SuperJump = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_NoRagDoll) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_NoRagDoll = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_SetArmor) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_SetArmor = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_CleanPlayerClothes) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_CleanPlayerClothes = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_WetPlayerClothes) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_WetPlayerClothes = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_DryPlayerClothes) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_DryPlayerClothes = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_CommitSuicide) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_CommitSuicide = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_FeezePlayer) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_FeezePlayer = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_Noclip) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_Noclip = true
+            end
+        end
+        for i, j in ipairs(PlayerRelatedOptions_ChangePed) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.PlayerRelatedOptions_ChangePed = true
+            end
+        end
     end
 end)
 
