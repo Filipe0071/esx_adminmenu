@@ -10,6 +10,31 @@ RegisterNetEvent("onResourceStart", function()
                 TSAdmins[j].permission.FullAccess = true
             end
         end
+        for i, j in ipairs(OnlinePlyOptions) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_SendMessage) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_SendMessage = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_ChangeSkin) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_ChangeSkin = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_OpenInventory) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_OpenInventory = true
+            end
+        end
+        for i, j in ipairs(OnlinePlyOptions_SetJob) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.OnlinePlyOptions_SetJob = true
+            end
+        end
     end
 end)
 
@@ -171,4 +196,44 @@ end
 
 lib.callback.register("esx_adminmenu:server:GetOnlinePlayers", function()
     return TSGetPlayers()
+end)
+
+RegisterNetEvent("esx_adminmenu:server:SendMessage", function(pid, msg)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(pid)
+    local message = msg
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_SendMessage", "OnlinePlyOptions")
+    if allowed then
+        print(xPlayer.getName(), msg)
+    else
+        --print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:ChangeSkin", function(ply)
+    local yPlayer = ESX.GetPlayerFromId(ply)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_ChangeSkin", "OnlinePlyOptions")
+    if allowed then
+        yPlayer.triggerEvent("esx_mroupa:openSaveableMenu")
+    else
+        --print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:ShowInventory", function(ply)
+    local src = source
+    local Ply = ply
+    local allowed = CheckAllowed(src, "OnlinePlyOptions_OpenInventory", "OnlinePlyOptions")
+    if allowed then
+        local inv = exports.ox_inventory:Inventory(tonumber(Ply))
+        TriggerClientEvent("ox_inventory:viewInventory", src, inv)
+    else
+        --print("tu n és admin")
+    end
+end)
+
+ESX.RegisterServerCallback("esx_adminmenu:server:GetJobs", function(source, cb)
+    local jobs = ESX.GetJobs()
+    cb(jobs)
 end)
