@@ -81,7 +81,7 @@ RegisterNetEvent("esx_adminmenu:client:SendMessage", function()
             if input then
                 local message = input[1]
                 if message == nil then
-                    return
+                    return lib.notify({title = "TS Admin Menu", description = "Inválid Message", type = "error"})
                 end
                 TriggerServerEvent("esx_adminmenu:server:SendMessage", selectedPlayer, message)
             end
@@ -146,7 +146,7 @@ RegisterNetEvent("esx_adminmenu:client:setgrade", function(data)
             if input then
                 local grade = tonumber(input[1])
                 if grade == nil then
-                    return
+                    return lib.notify({title = "TS Admin Menu", description = "Inválid Grade", type = "error"})
                 end
                 TriggerServerEvent("esx_adminmenu:server:SetJob", selectedPlayer, job, grade)
             end
@@ -161,11 +161,11 @@ RegisterNetEvent("esx_adminmenu:GiveItem", function(data)
         if allowed then
             local player = data.plyid
             local item = data.item
-            local input = lib.inputDialog("TS Admin Menu Give Item", {"Count:"})
+            local input = lib.inputDialog("TS Admin Menu Give Item", {"Amount:"})
             if input then
                 local count = tonumber(input[1])
                 if count == nil then
-                    return
+                    return lib.notify({title = "TS Admin Menu", description = "Inválid Amount", type = "error"})
                 end
                 TriggerServerEvent("esx_adminmenu:server:GiveItem", player, item, count)
             end
@@ -215,7 +215,7 @@ RegisterNetEvent("esx_adminmenu:client:RemoveItemCount", function(data)
             if input then
                 local count = tonumber(input[1])
                 if count == nil then
-                    return
+                    return lib.notify({title = "TS Admin Menu", description = "Inválid Amount", type = "error"})
                 end
                 TriggerServerEvent("esx_adminmenu:server:RemoveItem", pid, item, count)
             end
@@ -255,7 +255,7 @@ RegisterNetEvent("esx_adminmenu:client:GiveAccountMoney", function()
                 local account = input[1]
                 local money = tonumber(input[2])
                 if account == nil or money == nil then
-                    return
+                    return lib.notify({title = "TS Admin Menu", description = "Inválid Account or Amount", type = "error"})
                 end
                 TriggerServerEvent("esx_adminmenu:server:GiveAccMoney", selectedPlayer, account, money)
             end
@@ -273,7 +273,7 @@ RegisterNetEvent("esx_adminmenu:client:RemoveAccountMoney", function()
                 local account = input[1]
                 local money = tonumber(input[2])
                 if account == nil or money == nil then
-                    return
+                    return lib.notify({title = "TS Admin Menu", description = "Inválid Account Or Amount", type = "error"})
                 end
                 TriggerServerEvent("esx_adminmenu:server:RemoveAccMoney", selectedPlayer, account, money)
             end
@@ -290,7 +290,7 @@ RegisterNetEvent("esx_adminmenu:client:ToggleLicense", function()
             if input then
                 local license = input[1]
                 if license == nil then
-                    return
+                    return lib.notify({title = "TS Admin Menu", description = "Inválid Name", type = "error"})
                 end
                 TriggerServerEvent("esx_adminmenu:server:ToggleLicense", selectedPlayer, license)
             end
@@ -502,7 +502,7 @@ RegisterNetEvent("esx_adminmenu:client:DeleteVehicle", function()
             if input then
                 local radius = input[1]
                 if radius == nil then
-                    return
+                    return lib.notify({title = "TS Admin Menu", description = "Inválid Radius", type = "error"})
                 end
                 TriggerServerEvent("esx_adminmenu:server:DeleteVehicle", radius)
             end
@@ -577,11 +577,13 @@ RegisterNetEvent("esx_adminmenu:toggle_FreezeVehicle", function()
                 local ped = PlayerPedId()
                 local veh = GetVehiclePedIsIn(ped, false)
                 FreezeEntityPosition(veh, false)
+                lib.notify({title = "TS Admin Menu", description = "Vehicle UnFreeze", type = "inform"})
             else
                 FreezeVehicle = true
                 local ped = PlayerPedId()
                 local veh = GetVehiclePedIsIn(ped, false)
                 FreezeEntityPosition(veh, true)
+                lib.notify({title = "TS Admin Menu", description = "Vehicle Freeze", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -599,11 +601,13 @@ RegisterNetEvent("esx_adminmenu:toggle_Engine", function()
                 local ped = PlayerPedId()
                 local veh = GetVehiclePedIsIn(ped, false)
                 SetVehicleEngineOn(veh, false, true, true)
+                lib.notify({title = "TS Admin Menu", description = "Engine Off", type = "inform"})
             else
                 Engine = true
                 local ped = PlayerPedId()
                 local veh = GetVehiclePedIsIn(ped, false)
                 SetVehicleEngineOn(veh, true, true, true)
+                lib.notify({title = "TS Admin Menu", description = "Engine On", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -618,7 +622,7 @@ RegisterNetEvent("esx_adminmenu:ChangeNumberPlate", function()
             if input then
                 local platenumber = input[1]
                 if platenumber == nil then
-                    return 
+                    return lib.notify({title = "TS Admin Menu", description = "Inválid Plate", type = "error"})
                 end
                 local ped = PlayerPedId()
                 local veh = GetVehiclePedIsIn(ped, false)
@@ -671,6 +675,7 @@ RegisterNetEvent("esx_adminmenu:VehicleGodMode", function()
                 SetVehicleTyresCanBurst(veh, true)
                 SetDisableVehicleEngineFires(veh, false)
                 ClearInterval(vehgod)
+                lib.notify({title = "TS Admin Menu", description = "Vehicle GodMode Off", type = "inform"})
             else
                 VehicleGodMode = true
                 local veh = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -695,6 +700,7 @@ RegisterNetEvent("esx_adminmenu:VehicleGodMode", function()
                         SetVehicleEngineHealth(veh, 4000)
                     end
                 end, 0)
+                lib.notify({title = "TS Admin Menu", description = "Vehicle GodMode On", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -816,6 +822,7 @@ RegisterNetEvent("esx_adminmenu:toggle_GodMode", function()
                 SetPedDiesInVehicle(PlayerPedId(), true)
                 SetPedDiesInSinkingVehicle(PlayerPedId(), true)
                 ClearInterval(god)
+                lib.notify({title = "TS Admin Menu", description = "GodMode Off", type = "inform"})
             else
                 GodMode = true
                 local ped = PlayerPedId()
@@ -833,6 +840,7 @@ RegisterNetEvent("esx_adminmenu:toggle_GodMode", function()
                         SetEntityHealth(PlayerPedId(), maxh)
                     end
                 end, 0)
+                lib.notify({title = "TS Admin Menu", description = "GodMode On", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -850,11 +858,13 @@ RegisterNetEvent("esx_adminmenu:toggle_Invisible", function()
                 SetEntityVisible(PlayerPedId(), true, 0)
                 SetPedAudioFootstepLoud(PlayerPedId(), true)
                 SetPedAudioFootstepQuiet(PlayerPedId(), true)
+                lib.notify({title = "TS Admin Menu", description = "Invisible Off", type = "inform"})
             else
                 Invisible = true
                 SetEntityVisible(PlayerPedId(), false, 0)
                 SetPedAudioFootstepLoud(PlayerPedId(), false)
                 SetPedAudioFootstepQuiet(PlayerPedId(), false)
+                lib.notify({title = "TS Admin Menu", description = "Invisible On", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -871,11 +881,13 @@ RegisterNetEvent("esx_adminmenu:toggle_Stamina", function()
             if Stamina then
                 Stamina = false
                 ClearInterval(stam)
+                lib.notify({title = "TS Admin Menu", description = "Stamina Off", type = "inform"})
             else
                 Stamina = true
                 stam = SetInterval(function()
                     RestorePlayerStamina(PlayerId(), 1.0)
                 end, 100)
+                lib.notify({title = "TS Admin Menu", description = "Stamina On", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -891,9 +903,11 @@ RegisterNetEvent("esx_adminmenu:toggle_FastSwim", function()
             if FastSwim then
                 FastSwim = false
                 SetSwimMultiplierForPlayer(PlayerId(), 1.0)
+                lib.notify({title = "TS Admin Menu", description = "FastSwim Off", type = "inform"})
             else
                 FastSwim = true
                 SetSwimMultiplierForPlayer(PlayerId(), 1.49)
+                lib.notify({title = "TS Admin Menu", description = "FastSwim On", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -910,11 +924,13 @@ RegisterNetEvent("esx_adminmenu:toggle_SuperJump", function()
             if SuperJumpp then
                 SuperJumpp = false
                 ClearInterval(superjump)
+                lib.notify({title = "TS Admin Menu", description = "SuperJump Off", type = "inform"})
             else
                 SuperJumpp = true
                 superjump = SetInterval(function()
                     SetSuperJumpThisFrame(PlayerId())
                 end, 0)
+                lib.notify({title = "TS Admin Menu", description = "SuperJump On", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -933,12 +949,14 @@ RegisterNetEvent("esx_adminmenu:toggle_NoRagDoll", function()
                 SetPedCanRagdollFromPlayerImpact(PlayerPedId(), true)
                 SetPedCanRagdoll(PlayerPedId(), true)
                 ClearInterval(ragdoll)
+                lib.notify({title = "TS Admin Menu", description = "RagDoll Off", type = "inform"})
             else
                 NoRagDoll = true
                 ragdoll = SetInterval(function()
                     SetPedCanRagdoll(PlayerPedId(), false)
                     SetPedCanRagdollFromPlayerImpact(PlayerPedId(), false)
                 end, 0)
+                lib.notify({title = "TS Admin Menu", description = "RagDoll On", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -1027,9 +1045,11 @@ RegisterNetEvent("esx_adminmenu:FeezePlayer", function()
             if FeezePlayer then
                 FeezePlayer = false
                 FreezeEntityPosition(PlayerPedId(), false)
+                lib.notify({title = "TS Admin Menu", description = "Player UnFreeze", type = "inform"})
             else
                 FeezePlayer = true
                 FreezeEntityPosition(PlayerPedId(), true)
+                lib.notify({title = "TS Admin Menu", description = "Player Freeze", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -1045,9 +1065,11 @@ RegisterNetEvent("esx_adminmenu:toggle_noclip", function()
             if Noclip then
                 Noclip = false
                 SetNoClip(false)
+                lib.notify({title = "TS Admin Menu", description = "Noclip Off", type = "inform"})
             else
                 Noclip = true
                 SetNoClip(true)
+                lib.notify({title = "TS Admin Menu", description = "Noclip On", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -1099,7 +1121,7 @@ RegisterNetEvent("esx_adminmenu:client:ChangePed", function()
             if input then
                 local ped = input[1]
                 if ped == nil then
-                    return
+                    return lib.notify({title = "TS Admin Menu", description = "Inválid Model", type = "error"})
                 end
                 SetPlayerSkin(ped)
             end
@@ -1213,9 +1235,11 @@ RegisterNetEvent("esx_adminmenu:toggle_thermalvision", function()
             if ThermalVision then
                 ThermalVision = false
                 SetSeethrough(false)
+                lib.notify({title = "TS Admin Menu", description = "Thermal Vision Off", type = "inform"})
             else
                 ThermalVision = true
                 SetSeethrough(true)
+                lib.notify({title = "TS Admin Menu", description = "Thermal Vision On", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -1231,9 +1255,11 @@ RegisterNetEvent("esx_adminmenu:toggle_nightvision", function()
             if NightVision then
                 NightVision = false
                 SetNightvision(false)
+                lib.notify({title = "TS Admin Menu", description = "Night Vision Off", type = "inform"})
             else
                 NightVision = true
                 SetNightvision(true)
+                lib.notify({title = "TS Admin Menu", description = "Night Vision On", type = "inform"})
             end
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
@@ -1785,18 +1811,7 @@ RegisterNetEvent("esx_adminmenu:record", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             StartRecording(1)
-            lib.notify({
-                title = "Rockstar Editor",
-                description = "Started recording",
-                position = "top",
-                duration = 5000,
-                style = {
-                    backgroundColor = "green",
-                    color = "white"
-                },
-                icon = "fa-solid fa-circle-info",
-                iconColor = "white"
-            })
+            lib.notify({title = "TS Admin Menu", description = "Started recording", type = "inform"})
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
@@ -1808,18 +1823,7 @@ RegisterNetEvent("esx_adminmenu:saveclip", function()
         if allowed then
             StartRecording(0)
             StopRecordingAndSaveClip()
-            lib.notify({
-                title = "Rockstar Editor",
-                description = "Saved recording",
-                position = "top",
-                duration = 5000,
-                style = {
-                    backgroundColor = "green",
-                    color = "white"
-                },
-                icon = "fa-solid fa-circle-info",
-                iconColor = "white"
-            })
+            lib.notify({title = "TS Admin Menu", description = "Saved recording", type = "inform"})
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
@@ -1830,18 +1834,7 @@ RegisterNetEvent("esx_adminmenu:delclip", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             StopRecordingAndDiscardClip()
-            lib.notify({
-                title = "Rockstar Editor",
-                description = "Discarded recording",
-                position = "top",
-                duration = 5000,
-                style = {
-                    backgroundColor = "green",
-                    color = "white"
-                },
-                icon = "fa-solid fa-circle-info",
-                iconColor = "white"
-            })
+            lib.notify({title = "TS Admin Menu", description = "Discarded recording", type = "inform"})
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
@@ -1851,18 +1844,7 @@ end)
 RegisterNetEvent("esx_adminmenu:editor", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
-            lib.notify({
-                title = "Rockstar Editor",
-                description = "Opening Rockstar Editor",
-                position = "top",
-                duration = 5000,
-                style = {
-                    backgroundColor = "green",
-                    color = "white"
-                },
-                icon = "fa-solid fa-circle-info",
-                iconColor = "white"
-            })
+            lib.notify({title = "TS Admin Menu", description = "Opening Rockstar Editor", type = "inform"})
             NetworkSessionLeaveSinglePlayer()
             ActivateRockstarEditor()
         else
