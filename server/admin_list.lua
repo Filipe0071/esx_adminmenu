@@ -70,3 +70,9 @@ TrollMenu_Lag = {}
 TrollMenu_BlowTyre = {}
 TrollMenu_Eject = {}
 TrollMenu_Crash = {}
+
+RockstarEditor = {}
+RockstarEditor_Record = {}
+RockstarEditor_SaveClip = {}
+RockstarEditor_DelClip = {}
+RockstarEditor_Editor = {}

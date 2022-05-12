@@ -10,7 +10,7 @@ RegisterCommand("tsadmin", function()
                     ["🚙 Vehicle Related Options"] = {event = "esx_adminmenu:VehiclesRelatedOptionsMenu", description = "Show Vehicle Related Options"},
                     ["🚧 Misc Settings"] = {event = "esx_adminmenu:MiscOptions", description = "Misc Settings"},
                     ["🚧 Troll Menu"] = {event = "esx_adminmenu:TrollMenu", description = "Open Troll Menu"},
-                    ["📸 Rockstar Editor"] = {description = "Rockstar Settings"}
+                    ["📸 Rockstar Editor"] = {event = "esx_adminmenu:RockstarSettings", description = "Rockstar Settings"}
                 }
             })
             lib.showContext("admin_menu")
@@ -1758,4 +1758,115 @@ RegisterNetEvent("esx_adminmenu:troll:Crashply", function()
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
     end, "TrollMenu_Crash")
+end)
+
+RegisterNetEvent("esx_adminmenu:RockstarSettings", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.registerContext({
+                id = "rockstar_settings",
+                title = "📸 Rockstar Editor",
+                menu = "admin_menu",
+                options = {
+                    ["🎥 Start Recording"] = {event = "esx_adminmenu:record", description = "Start Recording"},
+                    ["🎥 Save Recording"] = {event = "esx_adminmenu:saveclip", description = "Save Recording"},
+                    ["🎥 Discard Recording"] = {event = "esx_adminmenu:delclip", description = "Discard Recording"},
+                    ["🎥 Open Editor"] = {event = "esx_adminmenu:editor", description = "Open Editor"}
+                }
+            })
+            lib.showContext("rockstar_settings")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "RockstarEditor")
+end)
+
+RegisterNetEvent("esx_adminmenu:record", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            StartRecording(1)
+            lib.notify({
+                title = "Rockstar Editor",
+                description = "Started recording",
+                position = "top",
+                duration = 5000,
+                style = {
+                    backgroundColor = "green",
+                    color = "white"
+                },
+                icon = "fa-solid fa-circle-info",
+                iconColor = "white"
+            })
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "RockstarEditor_Record")
+end)
+
+RegisterNetEvent("esx_adminmenu:saveclip", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            StartRecording(0)
+            StopRecordingAndSaveClip()
+            lib.notify({
+                title = "Rockstar Editor",
+                description = "Saved recording",
+                position = "top",
+                duration = 5000,
+                style = {
+                    backgroundColor = "green",
+                    color = "white"
+                },
+                icon = "fa-solid fa-circle-info",
+                iconColor = "white"
+            })
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "RockstarEditor_SaveClip")
+end)
+
+RegisterNetEvent("esx_adminmenu:delclip", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            StopRecordingAndDiscardClip()
+            lib.notify({
+                title = "Rockstar Editor",
+                description = "Discarded recording",
+                position = "top",
+                duration = 5000,
+                style = {
+                    backgroundColor = "green",
+                    color = "white"
+                },
+                icon = "fa-solid fa-circle-info",
+                iconColor = "white"
+            })
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "RockstarEditor_DelClip")
+end)
+
+RegisterNetEvent("esx_adminmenu:editor", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.notify({
+                title = "Rockstar Editor",
+                description = "Opening Rockstar Editor",
+                position = "top",
+                duration = 5000,
+                style = {
+                    backgroundColor = "green",
+                    color = "white"
+                },
+                icon = "fa-solid fa-circle-info",
+                iconColor = "white"
+            })
+            NetworkSessionLeaveSinglePlayer()
+            ActivateRockstarEditor()
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "RockstarEditor_Editor")
 end)

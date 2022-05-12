@@ -330,6 +330,31 @@ RegisterNetEvent("onResourceStart", function()
                 TSAdmins[j].permission.TrollMenu_Crash = true
             end
         end
+        for i, j in ipairs(RockstarEditor) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.RockstarEditor = true
+            end
+        end
+        for i, j in ipairs(RockstarEditor_Record) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.RockstarEditor_Record = true
+            end
+        end
+        for i, j in ipairs(RockstarEditor_SaveClip) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.RockstarEditor_SaveClip = true
+            end
+        end
+        for i, j in ipairs(RockstarEditor_DelClip) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.RockstarEditor_DelClip = true
+            end
+        end
+        for i, j in ipairs(RockstarEditor_Editor) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.RockstarEditor_Editor = true
+            end
+        end
     end
 end)
 
