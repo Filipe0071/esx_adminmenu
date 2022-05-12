@@ -526,18 +526,7 @@ RegisterNetEvent("esx_adminmenu:server:SendMessage", function(pid, msg)
     if allowed then
         print(xPlayer.getName(), msg)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -548,18 +537,7 @@ RegisterNetEvent("esx_adminmenu:server:ChangeSkin", function(ply)
     if allowed then
         yPlayer.triggerEvent("esx_mroupa:openSaveableMenu")
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -571,18 +549,7 @@ RegisterNetEvent("esx_adminmenu:server:ShowInventory", function(ply)
         local inv = exports.ox_inventory:Inventory(tonumber(Ply))
         TriggerClientEvent("ox_inventory:viewInventory", src, inv)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -601,18 +568,7 @@ RegisterNetEvent("esx_adminmenu:server:GiveItem", function(pid, item, count)
     if allowed then
         exports.ox_inventory:AddItem(yPlayer.playerId, titem, amount, nil, nil, nil)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -628,18 +584,7 @@ RegisterNetEvent("esx_adminmenu:server:GetItems", function(pid)
         end)
         TriggerClientEvent("esx_adminmenu:client:RemoveItem", src, pid, item)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -653,18 +598,7 @@ RegisterNetEvent("esx_adminmenu:server:RemoveItem", function(pid, item, count)
     if allowed then
         exports.ox_inventory:RemoveItem(yPlayer.playerId, titem, amount, nil, nil)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -679,18 +613,7 @@ RegisterNetEvent("esx_adminmenu:server:GiveAccMoney", function(pid, acc, amount)
             yPlayer.addAccountMoney(account, money)
         end
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -705,18 +628,7 @@ RegisterNetEvent("esx_adminmenu:server:RemoveAccMoney", function(pid, acc, amoun
             yPlayer.removeAccountMoney(account, money)
         end
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -750,18 +662,7 @@ RegisterNetEvent("esx_adminmenu:server:ToggleLicense", function(playerId, licens
             print("This License does not exist.")
         end
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -772,18 +673,7 @@ RegisterNetEvent("esx_adminmenu:server:HealPlayer", function(pid)
     if allowed then
         yPlayer.triggerEvent("esx_basicneeds:healPlayer")
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -794,18 +684,7 @@ RegisterNetEvent("esx_adminmenu:server:RevivePlayer", function(pid)
     if allowed then
         yPlayer.triggerEvent("esx_ambulancejob:revive")
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -817,18 +696,7 @@ RegisterNetEvent("esx_adminmenu:server:Goto", function(pid)
     if allowed then
         xPlayer.setCoords(yPlyCoords)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -840,18 +708,7 @@ RegisterNetEvent("esx_adminmenu:server:Bring", function(pid)
     if allowed then
         yPlayer.setCoords(xPlyCoords)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -878,18 +735,7 @@ RegisterNetEvent("esx_adminmenu:server:PrintID", function(pid)
         end
         TriggerClientEvent("esx_adminmenu:PrintID", xPlayer.source, steamid, license, xbl, ip, discord, liveid)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -900,18 +746,7 @@ RegisterNetEvent("esx_adminmenu:server:KillPlayer", function(pid)
     if allowed then
         TriggerClientEvent("esx_adminmenu:client:Kill", yPlayer.source)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -922,18 +757,7 @@ RegisterNetEvent("esx_adminmenu:server:KickPlayer", function(pid)
     if allowed then
         yPlayer.kick("You Have been kicked from the server by: " .. xPlayer.getName())
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -946,18 +770,7 @@ lib.callback.register("esx_adminmenu:server:GetSpectateData", function(source, p
         local pCoords = GetEntityCoords(GetPlayerPed(target))
         return pCoords
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -983,18 +796,7 @@ RegisterNetEvent("esx_adminmenu:server:DeleteVehicle", function(radi)
             end
         end
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -1031,18 +833,7 @@ RegisterNetEvent("esx_adminmenu:server:SpawnVehicle", function(veh)
             until GetVehiclePedIsIn(playerPed, false) ~= 0 or timeout < 1
         end)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -1053,18 +844,7 @@ RegisterNetEvent("esx_adminmenu:server:TruckPunchlinePly", function(data)
     if allowed then
         TriggerClientEvent("esx_adminmenu:troll:TruckPunchline", yPlayer.source)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -1075,18 +855,7 @@ RegisterNetEvent("esx_adminmenu:server:ClownAttackPly", function(data)
     if allowed then
         TriggerClientEvent("esx_adminmenu:troll:ClownAttack", yPlayer.source)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -1097,18 +866,7 @@ RegisterNetEvent("esx_adminmenu:server:MerryAttackPly", function(data)
     if allowed then
         TriggerClientEvent("esx_adminmenu:troll:MerryAttack", yPlayer.source)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -1119,18 +877,7 @@ RegisterNetEvent("esx_adminmenu:server:FlashPly", function(data)
     if allowed then
         TriggerClientEvent("esx_adminmenu:troll:FlashPly", yPlayer.source)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -1141,18 +888,7 @@ RegisterNetEvent("esx_adminmenu:server:LagGame", function(data2)
     if allowed then
         TriggerClientEvent("esx_adminmenu:troll:LagGame", yPlayer.source)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -1163,18 +899,7 @@ RegisterNetEvent("esx_adminmenu:server:BlowPly", function(data2)
     if allowed then
         TriggerClientEvent("esx_adminmenu:troll:BlowPly", yPlayer.source)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -1185,18 +910,7 @@ RegisterNetEvent("esx_adminmenu:server:EjectPly", function(data2)
     if allowed then
         TriggerClientEvent("esx_adminmenu:troll:EjectPly", yPlayer.source)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
 
@@ -1207,17 +921,6 @@ RegisterNetEvent("esx_adminmenu:server:Crashply", function(data2)
     if allowed then
         TriggerClientEvent("esx_adminmenu:troll:Crashply", yPlayer.source)
     else
-        TriggerClientEvent("ox_lib:notify", xPlayer.source, {
-            title = "TS Admin Menu",
-            description = "You are not allowed to do this",
-            position = "top-right",
-            duration = 5000,
-            style = {
-                backgroundColor = "red",
-                color = "white"
-            },
-            icon = "fa-solid fa-circle-info",
-            iconColor = "white"
-        })
+        TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
 end)
