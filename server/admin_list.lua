@@ -60,3 +60,13 @@ MiscSettings_ShowCoords = {}
 MiscSettings_ClearArea = {}
 MiscSettings_ThermalVision = {}
 MiscSettings_NightVision = {}
+
+TrollMenu = {}
+TrollMenu_Truck = {}
+TrollMenu_Clown = {}
+TrollMenu_Merry = {}
+TrollMenu_Flash = {}
+TrollMenu_Lag = {}
+TrollMenu_BlowTyre = {}
+TrollMenu_Eject = {}
+TrollMenu_Crash = {}

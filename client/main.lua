@@ -9,7 +9,7 @@ RegisterCommand("tsadmin", function()
                     ["🧍‍♂️ Player Related Options"] = {event = "esx_adminmenu:PlayerRelatedOptionsMenu", description = "Show Player Related Options"},
                     ["🚙 Vehicle Related Options"] = {event = "esx_adminmenu:VehiclesRelatedOptionsMenu", description = "Show Vehicle Related Options"},
                     ["🚧 Misc Settings"] = {event = "esx_adminmenu:MiscOptions", description = "Misc Settings"},
-                    ["🚧 Troll Menu"] = {description = "Open Troll Menu"},
+                    ["🚧 Troll Menu"] = {event = "esx_adminmenu:TrollMenu", description = "Open Troll Menu"},
                     ["📸 Rockstar Editor"] = {description = "Rockstar Settings"}
                 }
             })
@@ -1239,4 +1239,523 @@ RegisterNetEvent("esx_adminmenu:toggle_nightvision", function()
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
     end, "MiscSettings_NightVision")
+end)
+
+RegisterNetEvent("esx_adminmenu:TrollMenu", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.registerContext({
+                id = "troll_menu",
+                title = "🚧 Troll Menu",
+                menu = "admin_menu",
+                options = {
+                    ["🚚 Truck Punchline"] = {event = "esx_adminmenu:client:TruckPunchlinePly", description = "Truck Punchline"},
+                    ["🧛 Clown Attack"] = {event = "esx_adminmenu:client:ClownAttackPly", description = "Clown Attack"},
+                    ["👨‍🎤 Merryweather Attack"] = {event = "esx_adminmenu:client:MerryAttackPly", description = "Merryweather Attack"},
+                    ["👨‍🎤 Flashbang"] = {event = "esx_adminmenu:client:Flashbangply", description = "Flashbang"},
+                    ["⚰️ Lag Game"] = {event = "esx_adminmenu:client:Lagply", description = "Lag Game"},
+                    ["🕹 Blow Tyres"] = {event = "esx_adminmenu:client:BlowPly", description = "Blow Tyres"},
+                    ["🦵🏻 Eject From Veh"] = {event = "esx_adminmenu:client:EjectPly", description = "Eject From Veh"},
+                    ["⚰️ Crash Game"] = {event = "esx_adminmenu:client:Crashply", description = "Crash Game"}
+                }
+            })
+            lib.showContext("troll_menu")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:TruckPunchlinePly", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.callback("esx_adminmenu:server:GetOnlinePlayers", false, function(plyList)
+                local myMenu = {}
+                for k, v in pairs(plyList) do
+                    myMenu[v.name] = {
+                        description = v.name.." ID: "..v.source,
+                        arrow = true,
+                        serverEvent = "esx_adminmenu:server:TruckPunchlinePly",
+                        args = {plyid = v.source}
+                    }
+                end
+                lib.registerContext({id = "online_players", title = "🧍‍♂️ Online Players", menu = "troll_menu", options = myMenu})
+                lib.showContext("online_players")
+            end)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Truck")
+end)
+
+RegisterNetEvent("esx_adminmenu:troll:TruckPunchline", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local playerPed = PlayerPedId()
+            local pCoords = GetEntityCoords(playerPed)
+            local pRot = GetEntityRotation(playerPed)
+            RequestModel("rubble")
+            repeat
+                Wait(10)
+            until HasModelLoaded("rubble")
+            FreezeEntityPosition(playerPed, true)
+            if IsPedInAnyVehicle(playerPed, false) then
+                FreezeEntityPosition(GetVehiclePedIsIn(playerPed, false), true)
+            end
+            local arrowSpawn = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 3.0, 0.0)
+            local vehSpawn = GetOffsetFromEntityInWorldCoords(playerPed, -10.0, 0.0, 0.0)
+            local veh = CreateVehicle("rubble", vehSpawn, pRot.z - 90, true, false)
+            DisableVehicleWorldCollision(veh)
+            SetEntityCoords(veh, vehSpawn, 0.0, 0.0, pRot.z - 90.0, true)
+            FreezeEntityPosition(veh, true)
+            local i = 1
+            local loop = 0
+            local draw = true
+            repeat
+                i = i + 1
+                if i == 1 then
+                    draw = true
+                elseif i == 80 then
+                    draw = false
+                elseif i == 160 then
+                    draw = false
+                    loop = loop + 1
+                    i = 0
+                end
+                if draw then
+                    DrawMarker(21, arrowSpawn.x, arrowSpawn.y, arrowSpawn.z + 0.5, 0.0, 0.0, 0.0, 0.0, 270.0, 0.0, 2.0, 2.0, 2.0, 255, 255, 255, 160, false, true, 2)
+                end
+                Wait(0)
+            until (loop == 3)
+            FreezeEntityPosition(veh, false)
+            SetEntityRotation(veh, 0.0, 0.0, pRot.z - 90.0, 0, true)
+            SetVehicleForwardSpeed(veh, 80.0)
+            FreezeEntityPosition(playerPed, false)
+            if IsPedInAnyVehicle(playerPed, false) then
+                FreezeEntityPosition(GetVehiclePedIsIn(playerPed, false), false)
+            end
+            Wait(6000)
+            SetEntityAsMissionEntity(veh, true, true)
+            DeleteEntity(veh)
+            FreezeEntityPosition(playerPed, false)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Truck")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:ClownAttackPly", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.callback("esx_adminmenu:server:GetOnlinePlayers", false, function(plyList)
+                local myMenu = {}
+                for k, v in pairs(plyList) do
+                    myMenu[v.name] = {
+                        description = v.name.." ID: "..v.source,
+                        arrow = true,
+                        serverEvent = "esx_adminmenu:server:ClownAttackPly",
+                        args = {plyid = v.source}
+                    }
+                end
+                lib.registerContext({id = "online_players", title = "🧍‍♂️ Online Players", menu = "troll_menu", options = myMenu})
+                lib.showContext("online_players")
+            end)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Clown")
+end)
+
+RegisterNetEvent("esx_adminmenu:troll:ClownAttack", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local playerPed = PlayerPedId()
+            local pCoords = GetEntityCoords(playerPed)
+            RequestModel("speedo2")
+            repeat
+                Wait(10)
+            until HasModelLoaded("speedo2")
+            RequestModel("s_m_y_clown_01")
+            repeat
+                Wait(10)
+            until HasModelLoaded("s_m_y_clown_01")
+            repeat
+                found, SpawnCoords = FindSpawnPointInDirection(pCoords.x, pCoords.y, pCoords.z, 0.0, 0.0, 0.0, 100.0)
+                Wait(100)
+            until found
+            local veh = CreateVehicle("speedo2", SpawnCoords, 0, true, false)
+            SetVehicleModKit(veh, 0)
+            SetVehicleMod(veh, 11, 3, false)
+            SetVehicleMod(veh, 12, 3, false)
+            SetVehicleMod(veh, 13, 3, false)
+            ToggleVehicleMod(veh, 18, true)
+            AddRelationshipGroup("CLOWNS")
+            AddRelationshipGroup("ASSASINTARGET")
+            SetPedRelationshipGroupHash(playerPed, "ASSASINTARGET")
+            SetRelationshipBetweenGroups(5, "CLOWNS", "ASSASINTARGET")
+            SetRelationshipBetweenGroups(0, "CLOWNS", "CLOWNS")
+            local peds = {}
+            for i = -1, 4 do
+                local ped = CreatePedInsideVehicle(veh, "WHATEVER", "s_m_y_clown_01", i, true, false)
+                table.insert(peds, ped)
+                GiveWeaponToPed(ped, "weapon_microsmg", 999, false, true)
+                SetPedRelationshipGroupDefaultHash(ped, "CLOWNS")
+                SetPedRelationshipGroupHash(ped, "CLOWNS")
+                SetPedCombatAbility(ped, 2)
+                SetPedCombatMovement(ped, 3)
+                SetPedCombatRange(ped, 2)
+                SetPedCombatAttributes(ped, 46, true)
+                SetPedCombatAttributes(ped, 2, true)
+                SetPedCombatAttributes(ped, 3, false)
+                SetPedCombatAttributes(ped, 20, false)
+                TaskCombatPed(ped, playerPed, 0, 16)
+            end
+            local allPedsDead
+            repeat
+                Wait(100)
+                local alivePeds = {}
+                for i, ped in pairs(peds) do
+                    if not IsPedDeadOrDying(ped, true) then
+                        table.insert(alivePeds, ped)
+                    end
+                end
+                for i, ped in pairs(alivePeds) do
+                    local pedVeh = GetVehiclePedIsUsing(ped)
+                    if pedVeh ~= 0 and GetEntityHealth(pedVeh) < 100 then
+                        ClearPedTasks(ped)
+                        TaskLeaveVehicle(ped, pedVeh, 4160)
+                        Wait(5000)
+                        ClearPedTasks(ped)
+                        TaskCombatPed(ped, playerPed, 0, 16)
+                    end
+                end
+                if #alivePeds == 0 then
+                    allPedsDead = true
+                end
+            until (IsPedDeadOrDying(PlayerPedId(), true) or allPedsDead)
+            for i, ped in pairs(peds) do
+                if not IsPedDeadOrDying(ped, true) then
+                    ClearPedTasks(ped)
+                    TaskVehicleDriveWander(ped, veh, 60.0, 524860)
+                    SetPedAsNoLongerNeeded(ped)
+                else
+                    SetPedAsNoLongerNeeded(ped)
+                end
+            end
+            SetVehicleAsNoLongerNeeded(veh)
+            SetModelAsNoLongerNeeded("speedo2")
+            SetModelAsNoLongerNeeded("s_m_y_clown_01")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Clown")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:MerryAttackPly", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.callback("esx_adminmenu:server:GetOnlinePlayers", false, function(plyList)
+                local myMenu = {}
+                for k, v in pairs(plyList) do
+                    myMenu[v.name] = {
+                        description = v.name.." ID: "..v.source,
+                        arrow = true,
+                        serverEvent = "esx_adminmenu:server:MerryAttackPly",
+                        args = {plyid = v.source}
+                    }
+                end
+                lib.registerContext({id = "online_players", title = "🧍‍♂️ Online Players", menu = "troll_menu", options = myMenu})
+                lib.showContext("online_players")
+            end)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Merry")
+end)
+
+RegisterNetEvent("esx_adminmenu:troll:MerryAttack", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local playerPed = PlayerPedId()
+            local pCoords = GetEntityCoords(playerPed)
+            RequestModel("mesa3")
+            repeat
+                Wait(10)
+            until HasModelLoaded("mesa3")
+            RequestModel("S_M_Y_BlackOps_01")
+            repeat
+                Wait(10)
+            until HasModelLoaded("S_M_Y_BlackOps_01")
+            repeat
+                found, SpawnCoords = FindSpawnPointInDirection(pCoords.x, pCoords.y, pCoords.z, 0.0, 0.0, 0.0, 100.0)
+                Wait(100)
+            until found
+            local veh = CreateVehicle("mesa3", SpawnCoords, 0, true, false)
+            SetVehicleModKit(veh, 0)
+            SetVehicleMod(veh, 11, 3, false)
+            SetVehicleMod(veh, 12, 3, false)
+            SetVehicleMod(veh, 13, 3, false)
+            ToggleVehicleMod(veh, 18, true)
+            AddRelationshipGroup("CLOWNS")
+            AddRelationshipGroup("ASSASINTARGET")
+            SetPedRelationshipGroupHash(playerPed, "ASSASINTARGET")
+            SetRelationshipBetweenGroups(5, "CLOWNS", "ASSASINTARGET")
+            SetRelationshipBetweenGroups(0, "CLOWNS", "CLOWNS")
+            local peds = {}
+            for i = -1, 3 do
+                local ped = CreatePedInsideVehicle(veh, "WHATEVER", "S_M_Y_BlackOps_01", i, true, false)
+                table.insert(peds, ped)
+                GiveWeaponToPed(ped, "weapon_machinepistol", 999, false, true)
+                SetPedRelationshipGroupDefaultHash(ped, "CLOWNS")
+                SetPedRelationshipGroupHash(ped, "CLOWNS")
+                SetPedCombatAbility(ped, 2)
+                SetPedCombatMovement(ped, 3)
+                SetPedCombatRange(ped, 2)
+                SetPedCombatAttributes(ped, 46, true)
+                SetPedCombatAttributes(ped, 2, true)
+                SetPedCombatAttributes(ped, 3, false)
+                SetPedCombatAttributes(ped, 20, false)
+                TaskCombatPed(ped, playerPed, 0, 16)
+            end
+            local allPedsDead
+            repeat
+                Wait(100)
+                local alivePeds = {}
+                for i, ped in pairs(peds) do
+                    if not IsPedDeadOrDying(ped, true) then
+                        table.insert(alivePeds, ped)
+                    end
+                end
+                for i, ped in pairs(alivePeds) do
+                    local pedVeh = GetVehiclePedIsUsing(ped)
+                    if pedVeh ~= 0 and GetEntityHealth(pedVeh) < 100 then
+                        ClearPedTasks(ped)
+                        TaskLeaveVehicle(ped, pedVeh, 4160)
+                        Wait(5000)
+                        ClearPedTasks(ped)
+                        TaskCombatPed(ped, playerPed, 0, 16)
+                    end
+                end
+                if #alivePeds == 0 then
+                    allPedsDead = true
+                end
+            until (IsPedDeadOrDying(PlayerPedId(), true) or allPedsDead)
+            for i, ped in pairs(peds) do
+                if not IsPedDeadOrDying(ped, true) then
+                    ClearPedTasks(ped)
+                    TaskVehicleDriveWander(ped, veh, 60.0, 524860)
+                    SetPedAsNoLongerNeeded(ped)
+                else
+                    SetPedAsNoLongerNeeded(ped)
+                end
+            end
+            SetVehicleAsNoLongerNeeded(veh)
+            SetModelAsNoLongerNeeded("mesa3")
+            SetModelAsNoLongerNeeded("S_M_Y_BlackOps_01")
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Merry")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:Flashbangply", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.callback("esx_adminmenu:server:GetOnlinePlayers", false, function(plyList)
+                local myMenu = {}
+                for k, v in pairs(plyList) do
+                    myMenu[v.name] = {
+                        description = v.name.." ID: "..v.source,
+                        arrow = true,
+                        serverEvent = "esx_adminmenu:server:FlashPly",
+                        args = {plyid = v.source}
+                    }
+                end
+                lib.registerContext({id = "online_players", title = "🧍‍♂️ Online Players", menu = "troll_menu", options = myMenu})
+                lib.showContext("online_players")
+            end)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Flash")
+end)
+
+RegisterNetEvent("esx_adminmenu:troll:FlashPly", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            SetTimecycleModifier("mp_corona_heist_bw");
+            SetTimecycleModifierStrength(1.0)
+            intensity = 1.0
+            Wait(1000)
+            repeat
+                ShakeGameplayCam("LARGE_EXPLOSION_SHAKE", 0.5)
+                SetTimecycleModifierStrength(intensity)
+                intensity = intensity - 0.01
+                Wait(50)
+            until intensity <= 0.1
+            ClearTimecycleModifier()
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Flash")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:Lagply", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.callback("esx_adminmenu:server:GetOnlinePlayers", false, function(plyList)
+                local myMenu = {}
+                for k, v in pairs(plyList) do
+                    myMenu[v.name] = {
+                        description = v.name.." ID: "..v.source,
+                        arrow = true,
+                        serverEvent = "esx_adminmenu:server:LagGame",
+                        args = {plyid = v.source}
+                    }
+                end
+                lib.registerContext({id = "online_players", title = "🧍‍♂️ Online Players", menu = "troll_menu", options = myMenu})
+                lib.showContext("online_players")
+            end)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Lag")
+end)
+
+Citizen.CreateThread(function()
+    local stopGrief = false
+    local griefRunning = false
+    RegisterNetEvent("esx_adminmenu:troll:LagGame", function()
+        ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+            if allowed then
+                if griefRunning then
+                    stopGrief = true
+                    griefRunning = false
+                    return
+                elseif stopGrief then
+                    stopGrief = false
+                end
+                griefRunning = true
+                repeat
+                    for i = 1, 100000 do
+                        GetPlayerPed(PlayerId())
+                    end
+                    Wait(0)
+                until stopGrief
+            else
+                lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+            end
+        end, "TrollMenu_Lag")
+    end)
+end)
+
+RegisterNetEvent("esx_adminmenu:client:BlowPly", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.callback("esx_adminmenu:server:GetOnlinePlayers", false, function(plyList)
+                local myMenu = {}
+                for k, v in pairs(plyList) do
+                    myMenu[v.name] = {
+                        description = v.name.." ID: "..v.source,
+                        arrow = true,
+                        serverEvent = "esx_adminmenu:server:BlowPly",
+                        args = {plyid = v.source}
+                    }
+                end
+                lib.registerContext({id = "online_players", title = "🧍‍♂️ Online Players", menu = "troll_menu", options = myMenu})
+                lib.showContext("online_players")
+            end)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_BlowTyre")
+end)
+
+RegisterNetEvent("esx_adminmenu:troll:BlowPly", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+            if veh and veh ~= 0 then
+                for i = 0, 6 do
+                    SetVehicleTyreBurst(veh, i, true, 1000.0)
+                end
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_BlowTyre")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:EjectPly", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.callback("esx_adminmenu:server:GetOnlinePlayers", false, function(plyList)
+                local myMenu = {}
+                for k, v in pairs(plyList) do
+                    myMenu[v.name] = {
+                        description = v.name.." ID: "..v.source,
+                        arrow = true,
+                        serverEvent = "esx_adminmenu:server:EjectPly",
+                        args = {plyid = v.source}
+                    }
+                end
+                lib.registerContext({id = "online_players", title = "🧍‍♂️ Online Players", menu = "troll_menu", options = myMenu})
+                lib.showContext("online_players")
+            end)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Eject")
+end)
+
+RegisterNetEvent("esx_adminmenu:troll:EjectPly", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local ped = PlayerPedId()
+            local veh = GetVehiclePedIsIn(ped, false)
+            if veh and veh ~= 0 then
+                ClearPedTasksImmediately(ped)
+                local coords = GetEntityCoords(ped)
+                local axis = GetEntityRotation(ped)
+                SetEntityCoords(ped, coords.x, coords.y, coords.z + 0.1, 0, 0, axis, false)
+                SetPedToRagdoll(ped, 10, 10, 2, true, true, true)
+                SetEntityVelocity(ped, 0, 0, 10.0)
+            end
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Eject")
+end)
+
+RegisterNetEvent("esx_adminmenu:client:Crashply", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            lib.callback("esx_adminmenu:server:GetOnlinePlayers", false, function(plyList)
+                local myMenu = {}
+                for k, v in pairs(plyList) do
+                    myMenu[v.name] = {
+                        description = v.name.." ID: "..v.source,
+                        arrow = true,
+                        serverEvent = "esx_adminmenu:server:Crashply",
+                        args = {plyid = v.source}
+                    }
+                end
+                lib.registerContext({id = "online_players", title = "🧍‍♂️ Online Players", menu = "troll_menu", options = myMenu})
+                lib.showContext("online_players")
+            end)
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Crash")
+end)
+
+RegisterNetEvent("esx_adminmenu:troll:Crashply", function()
+    ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            repeat
+            until false
+        else
+            lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
+        end
+    end, "TrollMenu_Crash")
 end)

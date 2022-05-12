@@ -285,6 +285,51 @@ RegisterNetEvent("onResourceStart", function()
                 TSAdmins[j].permission.MiscSettings_NightVision = true
             end
         end
+        for i, j in ipairs(TrollMenu) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.TrollMenu = true
+            end
+        end
+        for i, j in ipairs(TrollMenu_Truck) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.TrollMenu_Truck = true
+            end
+        end
+        for i, j in ipairs(TrollMenu_Clown) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.TrollMenu_Clown = true
+            end
+        end
+        for i, j in ipairs(TrollMenu_Merry) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.TrollMenu_Merry = true
+            end
+        end
+        for i, j in ipairs(TrollMenu_Flash) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.TrollMenu_Flash = true
+            end
+        end
+        for i, j in ipairs(TrollMenu_Lag) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.TrollMenu_Lag = true
+            end
+        end
+        for i, j in ipairs(TrollMenu_BlowTyre) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.TrollMenu_BlowTyre = true
+            end
+        end
+        for i, j in ipairs(TrollMenu_Eject) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.TrollMenu_Eject = true
+            end
+        end
+        for i, j in ipairs(TrollMenu_Crash) do
+            if TSAdmins[j] then
+                TSAdmins[j].permission.TrollMenu_Crash = true
+            end
+        end
     end
 end)
 
@@ -762,6 +807,94 @@ RegisterNetEvent("esx_adminmenu:server:SpawnVehicle", function(veh)
                 SetPedIntoVehicle(playerPed, car, -1)
             until GetVehiclePedIsIn(playerPed, false) ~= 0 or timeout < 1
         end)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:TruckPunchlinePly", function(data)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(data.plyid)
+    local allowed = CheckAllowed(xPlayer.source, "TrollMenu_Truck")
+    if allowed then
+        TriggerClientEvent("esx_adminmenu:troll:TruckPunchline", yPlayer.source)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:ClownAttackPly", function(data)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(data.plyid)
+    local allowed = CheckAllowed(xPlayer.source, "TrollMenu_Clown")
+    if allowed then
+        TriggerClientEvent("esx_adminmenu:troll:ClownAttack", yPlayer.source)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:MerryAttackPly", function(data)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(data.plyid)
+    local allowed = CheckAllowed(xPlayer.source, "TrollMenu_Merry")
+    if allowed then
+        TriggerClientEvent("esx_adminmenu:troll:MerryAttack", yPlayer.source)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:FlashPly", function(data)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(data.plyid)
+    local allowed = CheckAllowed(xPlayer.source, "TrollMenu_Flash")
+    if allowed then
+        TriggerClientEvent("esx_adminmenu:troll:FlashPly", yPlayer.source)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:LagGame", function(data2)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(data2.plyid)
+    local allowed = CheckAllowed(xPlayer.source, "TrollMenu_Lag")
+    if allowed then
+        TriggerClientEvent("esx_adminmenu:troll:LagGame", yPlayer.source)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:BlowPly", function(data2)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(data2.plyid)
+    local allowed = CheckAllowed(xPlayer.source, "TrollMenu_BlowTyre")
+    if allowed then
+        TriggerClientEvent("esx_adminmenu:troll:BlowPly", yPlayer.source)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:EjectPly", function(data2)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(data2.plyid)
+    local allowed = CheckAllowed(xPlayer.source, "TrollMenu_Eject")
+    if allowed then
+        TriggerClientEvent("esx_adminmenu:troll:EjectPly", yPlayer.source)
+    else
+        print("tu n és admin")
+    end
+end)
+
+RegisterNetEvent("esx_adminmenu:server:Crashply", function(data2)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(data2.plyid)
+    local allowed = CheckAllowed(xPlayer.source, "TrollMenu_Crash")
+    if allowed then
+        TriggerClientEvent("esx_adminmenu:troll:Crashply", yPlayer.source)
     else
         print("tu n és admin")
     end
