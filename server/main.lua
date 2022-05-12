@@ -524,7 +524,7 @@ RegisterNetEvent("esx_adminmenu:server:SendMessage", function(pid, msg)
     local message = msg
     local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_SendMessage")
     if allowed then
-        print(xPlayer.getName(), msg)
+        TriggerClientEvent('chat:addMessage', yPlayer.source, {template = '<div class="chat-message system"><i class="fas fa-comment"></i> <b><span style="color: #df7b00">{0}</span>&nbsp;<span style="font-size: 14px; color: #e1e1e1;"> - {1}</span></b><div style="margin-top: 5px; font-weight: 300;"><b>{2}</b></div></div>', args = {"TS Admin Menu", xPlayer.getName(), msg}})
     else
         TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
@@ -535,7 +535,7 @@ RegisterNetEvent("esx_adminmenu:server:ChangeSkin", function(ply)
     local xPlayer = ESX.GetPlayerFromId(source)
     local allowed = CheckAllowed(xPlayer.source, "OnlinePlyOptions_ChangeSkin")
     if allowed then
-        yPlayer.triggerEvent("esx_mroupa:openSaveableMenu")
+        yPlayer.triggerEvent("esx_skin:openSaveableMenu")
     else
         TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
     end
@@ -648,10 +648,10 @@ RegisterNetEvent("esx_adminmenu:server:ToggleLicense", function(playerId, licens
                     TriggerEvent("esx_license:checkLicense", playerId, license, function(hasLicense)
                         if hasLicense then
                             TriggerEvent("esx_license:removeLicense", playerId, license)
-                            print(yPlayer.getName(playerId) .. " " .. license .. " has been removed ")
+                            TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = yPlayer.getName(playerId) .. "'s" .. license .. " has been removed", type = "success"})
                         else
                             TriggerEvent("esx_license:addLicense", playerId, license)
-                            print(yPlayer.getName(playerId) .. " has been added the license " .. license)
+                            TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = yPlayer.getName(playerId) .. " has been added the license " .. license, type = "success"})
                         end
                     end)
                 end
@@ -659,7 +659,7 @@ RegisterNetEvent("esx_adminmenu:server:ToggleLicense", function(playerId, licens
         end)
         Wait(3000)
         if not found then
-            print("This License does not exist.")
+            TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "This License does not exist.", type = "error"})
         end
     else
         TriggerClientEvent("ox_lib:notify", xPlayer.source, {title = "TS Admin Menu", description = "You are not allowed to do this", type = "error"})
