@@ -640,8 +640,9 @@ RegisterNetEvent("esx_adminmenu:FlipVehicle", function()
     ESX.TriggerServerCallback("esx_adminmenu:server:IsAllowed", function(allowed)
         if allowed then
             local ped = PlayerPedId()
-            local veh = GetVehiclePedIsIn(ped, false)
-            SetVehicleOnGroundProperly(veh)
+            local veh = GetVehiclePedIsIn(ped, true)
+            local veh2 = GetVehiclePedIsIn(ped, false)
+            SetVehicleOnGroundProperly(veh or veh2)
         else
             lib.notify({title = "TS Admin Menu", description = "You are not an Admin", type = "error"})
         end
