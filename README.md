@@ -3,7 +3,7 @@ Admin Menu Inspired from ts-adminmenu
 
 ## DEPENDENCIES
 - chHyperSound - https://github.com/charleshacks/chHyperSound
-- ox_lib - https://github.com/overextended/ox_lib
+- ox_lib (2.3.0 or higher) - https://github.com/overextended/ox_lib
 - oxmysql - https://github.com/overextended/oxmysql
 
 ## Credits
